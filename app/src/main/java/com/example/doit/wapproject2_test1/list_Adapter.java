@@ -19,6 +19,7 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
         public TextView textView_category;
         public TextView textView_place;
         public TextView textView_price;
+        public TextView recycler_list_Date;
 
         public MyViewHolder(View view) {
             super(view);
@@ -26,6 +27,7 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
             textView_category = view.findViewById(R.id.textView_recycler_category);
             textView_place = view.findViewById(R.id.textView_recycler_place);
             textView_price = view.findViewById(R.id.textView_recycler_price);
+            recycler_list_Date=view.findViewById(R.id.recycler_list_Date);
         }
 
     }
@@ -56,7 +58,7 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
         holder.textView_category.setText(list_Dataset.get(position).category);
         holder.textView_place.setText(list_Dataset.get(position).place);
         holder.textView_price.setText(list_Dataset.get(position).price);
-
+        holder.recycler_list_Date.setText(list_Dataset.get(position).date);
    }
 
     // Return the size of your dataset (invoked by the layout manager)
