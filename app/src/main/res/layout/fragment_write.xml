@@ -163,7 +163,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:hint="숫자만 입력"/>
+        android:imeOptions="actionDone"
+        android:hint="가격"/>
         </LinearLayout>
         </android.support.v7.widget.CardView>
 
