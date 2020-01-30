@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">wapproject2_test1</string>
+    <string name="app_name">MoneyBook</string>
     <string name="title_home">메인</string>
     <string name="title_dashboard">기입</string>
     <string name="title_notifications">설정</string>

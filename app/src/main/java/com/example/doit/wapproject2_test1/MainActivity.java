@@ -6,26 +6,50 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.util.ArrayList;
+import org.json.JSONArray;
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WriteFragment.CustomOnClickListener, WriteFragment.WriteValueSetListener {
 
     //bottomNavi
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private MainFragment mainFragment = new MainFragment();
     private WriteFragment writeFragment = new WriteFragment();
     private SettingFragment settingFragment = new SettingFragment();
-    public TextView textView_money;
-    private String allmoney="4000000";
-    private int format_allmoney;
-    private String allmoney_final;
 
+    private String newPlace;
+    private String newCategory;
+    private String newCost;
+    private String newDate;
+    private String newState;
+
+    private ArrayList<String> categoryData= new ArrayList<>();
+    private ArrayList<String> placeData= new ArrayList<>();
+    private ArrayList<String> costData= new ArrayList<>();
+    private ArrayList<String> dateData= new ArrayList<>();
+    private ArrayList<String> stateData= new ArrayList<>();
+
+    public void appendData(String categorydata,String costdata,String placedata,String datedata,String statedata){
+        categoryData.add(categorydata);
+        costData.add(costdata);
+        placeData.add(placedata);
+        dateData.add(datedata);
+        stateData.add(statedata);
+        System.out.println("Appendtest호출");
+    }
+
+
+    private static final String SETTINGS_PLAYER = "settings_player";
 
 
     @Override
@@ -33,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("오픈");
+        categoryData = getStringArrayPref("category");
+        costData = getStringArrayPref("cost");
+        placeData = getStringArrayPref("place");
+        dateData = getStringArrayPref("date");
+        stateData = getStringArrayPref("state");
+
+        mainFragment.reFreshArr(categoryData,costData,placeData,dateData,stateData);
 
         //bottomNavi
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -40,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+
+
+
+//        for(int n = 0; n < testArr.size();n ++){
+//            System.out.println("오픈됨 "+testArr.get(n));
+//            mainFragment.AppendItem(newCategory,testArr.get(n),newPlace,newDate,newState);
+//        }
+//        mainFragment.prepareData();
 
 /*
         //총자산표시
@@ -49,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
         allmoney_final=formatter2.format(format_allmoney);
         textView_money.setText(allmoney_final);*/
     }
+
+
+
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener{
         @Override
@@ -69,6 +112,104 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
+
+
+
     }
+
+    @Override
+    public void onSubmitClicked(View v) {
+        System.out.println("여기는 액티비티");
+        appendData(newCategory,newCost,newPlace,newDate,newState);
+        for(int n = 0; n < costData.size();n ++){
+            System.out.println(costData.get(n));
+        }
+        mainFragment.AppendItem(newCategory,newCost,newPlace,newDate,newState);
+
+    }
+
+    @Override
+    public void writeValueSet(String category, String cost, String place,String date, String state)
+    {
+        newPlace= place;
+        newCategory = category;
+        newCost = cost;
+        newDate=date;
+        newState=state;
+//        System.out.println(cost + "여기는 메인 액티비티");
+    }
+
+    public void setStringArrayPref(String key, ArrayList<String> values) {
+        System.out.println("여기는 setStringArrayPref");
+
+        SharedPreferences prefs = getSharedPreferences(SETTINGS_PLAYER, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray a = new JSONArray();
+        for (int i = 0; i < values.size(); i++) {
+            a.put(values.get(i));
+        }
+        if (!values.isEmpty()) {
+            editor.putString(key, a.toString());
+        } else {
+            editor.putString(key, null);
+        }
+        editor.apply();
+    }
+
+    public  ArrayList<String> getStringArrayPref(String key) {
+        System.out.println("여기는 getStringArrayPref");
+
+        SharedPreferences prefs = getSharedPreferences(SETTINGS_PLAYER, MODE_PRIVATE);
+        String json = prefs.getString(key, null);
+        ArrayList<String> urls = new ArrayList<String>();
+        if (json != null) {
+            try {
+                JSONArray a = new JSONArray(json);
+                for (int i = 0; i < a.length(); i++) {
+                    String url = a.optString(i);
+                    urls.add(url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return urls;
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Activity가 종료되기 전에 저장한다.
+        //SharedPreferences를 sFile이름, 기본모드로 설정
+        for(int n = 0; n < costData.size();n ++){
+            System.out.println("종료직전 "+costData.get(n));
+        }
+        setStringArrayPref("category", categoryData);
+        setStringArrayPref("cost", costData);
+        setStringArrayPref("place", placeData);
+        setStringArrayPref("date", dateData);
+        setStringArrayPref("state", stateData);
+        System.out.println("저장");
+
+//        SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
+
+//        //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        String text = editText.getText().toString(); // 사용자가 입력한 저장할 데이터
+//        editor.putString("text",text); // key, value를 이용하여 저장하는 형태
+//        //다양한 형태의 변수값을 저장할 수 있다.
+//        //editor.putString();
+//        //editor.putBoolean();
+//        //editor.putFloat();
+//        //editor.putLong();
+//        //editor.putInt();
+//        //editor.putStringSet();
+//
+//        //최종 커밋
+//        editor.apply();
+    }
+
 
 }

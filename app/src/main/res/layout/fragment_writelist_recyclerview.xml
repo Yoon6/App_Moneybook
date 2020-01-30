@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:weightSum="100"
     android:layout_marginBottom="5dp">
 
 
@@ -12,15 +13,15 @@
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:weightSum="1"
+        android:layout_weight="99"
         >
 
         <TextView
             android:id="@+id/textView_recycler_category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="식비"
-            android:paddingLeft="50dp"
-            android:gravity="center_vertical"
+            android:text="Category"
+            android:gravity="center"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark"
             android:layout_weight="0.6"/>
@@ -36,7 +37,7 @@
                 android:id="@+id/textView_recycler_place"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="맥도날드"
+                android:text="Place"
                 android:gravity="center_vertical|right"
                 android:paddingRight="50dp"
                 android:textSize="20sp"
@@ -52,7 +53,7 @@
                     android:id="@+id/textView_recycler_price"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="-7,000"
+                    android:text="Cost"
                     android:textSize="20sp"
                     android:textColor="@color/colorPrimaryDark"
                     android:gravity="center_vertical|right"
@@ -73,6 +74,16 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/recycler_list_Date"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="yyyy년MM월dd일"
+        android:textSize="10sp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        />
 
 </LinearLayout>
