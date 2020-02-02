@@ -1,17 +1,11 @@
 package com.example.doit.wapproject2_test1;
 
 import android.app.AlertDialog;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.util.Log;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,11 +36,6 @@ public class WriteFragment extends Fragment {
     EditText writePlace;
     EditText writeDate;
     EditText writeCost;
-    private CustomOnClickListener customOnClickListener;
-    private WriteValueSetListener writeValueSetListener;
-
-    // SQL DB의 레퍼런스
-    private SQLiteDatabase mDb;
 
     // 프래그먼트 새로고침
     private void fg_refresh() {
@@ -70,14 +55,6 @@ public class WriteFragment extends Fragment {
         // 출력될 포맷 설정
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
         writeDate.setText(simpleDateFormat.format(date));
-    }
-
-    public interface CustomOnClickListener {
-        void onSubmitClicked (View v);
-    }
-
-    public interface WriteValueSetListener {
-        void writeValueSet(String category, String price, String cost,String date, String state);
     }
 
     @Override
@@ -103,16 +80,28 @@ public class WriteFragment extends Fragment {
         setDate();
         submitBtn = v.findViewById(R.id.submitBtn);
         cancelBtn = v.findViewById(R.id.cancelBtn);
-        /*
+
+        // 입력버튼
         submitBtn.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
+                if(writeRadioButton1.isChecked()==true){
+                    radio_state="expense";
+                }else{
+                    radio_state="income";
+                }
+                paramState=radio_state;
+                paramCategory = writeCategoryList.getSelectedItem().toString();
+                paramCost = writeCost.getText().toString();
+                paramPlace = writePlace.getText().toString();
+                paramDate = writeDate.getText().toString();
 
 
                 if(paramCost.isEmpty() || Integer.parseInt(paramCost)==0){  // 가격을 기입하지 않을 경우 리스트에 요소 추가하지 않음
                     Toast.makeText(getActivity().getApplicationContext(),"양식을 완성해주세요.",Toast.LENGTH_LONG).show();
                 }
                 else {
-                    buttonClicked(v,paramCategory,paramCost,paramPlace,paramDate,paramState);
+                    // null값이 아닐 때 데이터베이스 저장
                     fg_refresh();
                     Toast.makeText(getActivity().getApplicationContext(),"입력되었습니다.",Toast.LENGTH_LONG).show();
 
@@ -121,8 +110,7 @@ public class WriteFragment extends Fragment {
             }
         } );
 
-         */
-
+        // 취소버튼
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,25 +119,6 @@ public class WriteFragment extends Fragment {
         });
 
         return v;
-    }
-
-    public void buttonClicked(View v,String category, String cost, String place, String date,String state){
-        System.out.println(cost+"여기는라이트프레그먼트");
-
-//        Log.d("text","값은 : "+s);
-        writeValueSetListener.writeValueSet(category,cost,place,date,state);
-        customOnClickListener.onSubmitClicked(v);
-
-    }
-
-    @Override
-    @Deprecated
-    public void onAttach(Context context){
-        System.out.println("어태치 되었음 라이트");
-
-        super.onAttach(context);
-        writeValueSetListener = (WriteValueSetListener)context;
-        customOnClickListener = (CustomOnClickListener)context;
     }
 
     // 취소 경고창
@@ -175,54 +144,4 @@ public class WriteFragment extends Fragment {
 
     }
 
-    // 등록하기 버튼을 눌렀을 때 불리는 메서드
-    public void addToConsumelist(View view) {
-
-        if(writeRadioButton1.isChecked()==true){
-            radio_state="expense";
-        }else{
-            radio_state="income";
-        }
-        paramState=radio_state;
-        paramCategory = writeCategoryList.getSelectedItem().toString();
-        paramCost = writeCost.getText().toString();
-        paramPlace = writePlace.getText().toString();
-        paramDate = writeDate.getText().toString();
-
-        if (paramCost.isEmpty() || Integer.parseInt(paramCost)==0) {
-            return;
-        }
-
-        // 초기화
-        int cost = 1;
-        // 예기치 않은 에러 처리
-
-        try {
-            cost = Integer.parseInt(paramCost);
-        } catch (NumberFormatException ex) {
-            // 내용
-        }
-
-        // DB에 데이터 추가
-        addNewList(paramState, paramCategory, paramPlace, cost, paramDate);
-    }
-
-    // 새 데이터를 추가하는 메서드로, 추가되는 레코드의 아이디를 리턴한다.
-    private long addNewList(String state, String category, String place, int cost, String date) {
-        // DB에 데이터를 추가를 하기 위해선 ContentValue 객체를 사용해야 한다.
-        ContentValues cv = new ContentValues();
-        /*
-         * 열의 이름을 키로 해서 해당 값을 가리킨다.
-         * 값들을 put 메서드를 사용해 입력한다.
-         * 첫번째 파라미터는 열의 이름으로, Contract 로부터 가져올 수 있다.
-         * 두번째 파라미터는 값이다.
-         */
-        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_STATE, state);
-        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_CATEGORY, category);
-        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_PLACE, place);
-        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_COST, cost);
-        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_DATE, date);
-        // cv에 저장된 값을 사용하여 새로운 행을 추가한다.
-        return mDb.insert(ConsumeListContract.ConsumeListEntry.TABLE_NAME, null, cv);
-    }
 }

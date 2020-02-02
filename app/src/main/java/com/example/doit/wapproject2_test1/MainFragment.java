@@ -1,12 +1,6 @@
 package com.example.doit.wapproject2_test1;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,18 +19,11 @@ import java.text.DecimalFormat;
 
 public class MainFragment extends Fragment {
 
-
-    private static final String SETTINGS_CATEGORY="settings_category";
-    private static final String SETTINGS_PLACE="settings_place";
-    private static final String SETTINGS_PRICE="settings_price";
-    private static final String SETTINGS_DATE="settings_date";
     //recyclerview
     private RecyclerView list_recyclerView;
     private RecyclerView.Adapter list_Adapter;
     private RecyclerView.LayoutManager list_layoutManager;
     private ArrayList<list_Data> listDataset;
-    // SQL DB의 레퍼런스
-    private SQLiteDatabase mDb;
 
     private ArrayList<String> list_category= new ArrayList<>();
     private ArrayList<String> list_place = new ArrayList<>();
@@ -44,37 +31,13 @@ public class MainFragment extends Fragment {
     private ArrayList<String> list_date= new ArrayList<>();
     private ArrayList<String> list_state= new ArrayList<>();
 
-
-    private ArrayList<String> storedCategoryData= new ArrayList<>();
-    private ArrayList<String> storedCostData= new ArrayList<>();
-    private ArrayList<String> storedPlaceData= new ArrayList<>();
-    private ArrayList<String> storedDateData= new ArrayList<>();
-    private ArrayList<String> storedStateData= new ArrayList<>();
-
-
     public TextView totalMoney;
     public int int_totalMoney=0;
     private String totalMoney_final="0";
 
-
-    public void AppendItem(String category, String cost, String place, String date, String state){
-        System.out.println("AppendItem 수행 ");
-
-        list_category.add(0,category);
-        list_price.add(0,cost);
-        list_place.add(0,place);
-        list_date.add(0,date);
-        list_state.add(0,state);
-
-
-
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_main,container,false);
-
-
 
         //컴마찍는 함수
         DecimalFormat formatter=new DecimalFormat("###,###,###");
@@ -94,30 +57,15 @@ public class MainFragment extends Fragment {
         totalMoney_final=formatter.format(int_totalMoney);
         totalMoney.setText(totalMoney_final);
 
-        System.out.println("메인 fragment oncreateview 수행 ");
-
-        ConsumeListDbHelper dbHelper = new ConsumeListDbHelper(getActivity());
-        // 데이터를 DB에 채우기 위함
-        mDb = dbHelper.getWritableDatabase();
-        // 자동적으로 다섯명의 손님을 DB에 추가
-        TestUtil.insertFakeData(mDb);
-        //커서에 결과를 저장
-        Cursor cursor = getAllGuests();
-
         //recyclerview
         list_recyclerView= v.findViewById(R.id.my_recycler_view); //activity_list_recycler 의 리스트 뷰
         list_recyclerView.setHasFixedSize(true);
         list_layoutManager=new LinearLayoutManager(getActivity());
         list_recyclerView.setLayoutManager(list_layoutManager);
         list_recyclerView.scrollToPosition(0);
-
-        // 데이터를 표시할 커서를 위한 어댑터 생성
-        list_Adapter = new list_Adapter(getActivity(), cursor);
-        // 리사이클러뷰에 어댑터를 연결
+        list_Adapter = new list_Adapter(listDataset);
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        System.out.println("메인 fragment oncreateview 수행 끝끝끝");
 
         return v;
     }
@@ -131,27 +79,12 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        System.out.println("메인프레그 생성");
         prepareData();
 
 
     }
 
-    public void reFreshArr(ArrayList<String> categorydata,ArrayList<String> costdata,ArrayList<String> placedata,ArrayList<String> datedata, ArrayList<String> statedata){
-        storedCategoryData = categorydata;
-        storedCostData = costdata;
-        storedPlaceData = placedata;
-        storedDateData = datedata;
-        storedStateData = statedata;
-        for(int n = 0; n < storedCostData.size();n ++){
-//            System.out.println(storedCostData.size());
-//            System.out.println("오픈됨 "+storedCategoryData.get(n)+storedCostData.get(n)+storedPlaceData.get(n)+storedDateData.get(n)+storedStateData.get(n));
-            AppendItem(storedCategoryData.get(n),storedCostData.get(n),storedPlaceData.get(n),storedDateData.get(n),storedStateData.get(n));
-        }
-    }
-
     public void prepareData(){
-        System.out.println("prepareData 수행 ");
 
         listDataset = new ArrayList<>();
 
@@ -174,25 +107,5 @@ public class MainFragment extends Fragment {
             }
 
         }
-    }
-
-    /*
-     * Cursor 는 SQL 쿼리의 결과물이 저장되어 있는 것이다.
-     * 반복문으로 쉽게 확인할 수 있다.
-     * */
-    // 손님의 목록을 보여주기 위해 시간 순서대로 결과를 보여준다.
-    private Cursor getAllGuests() {
-        // 두번째 파라미터 (Projection array)는 여러 열들 중에서 출력하고 싶은 것만 선택해서 출력할 수 있게 한다.
-        // 모든 열을 출력하고 싶을 때는 null 을 입력한다.
-        return mDb.query(
-                ConsumeListContract.ConsumeListEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-                //ConsumeListContract.ConsumeListEntry.COLUMN_DATE
-        );
     }
 }
