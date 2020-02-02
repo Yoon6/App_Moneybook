@@ -3,6 +3,8 @@ package com.example.doit.wapproject2_test1;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -33,6 +35,8 @@ public class MainFragment extends Fragment {
     private RecyclerView.Adapter list_Adapter;
     private RecyclerView.LayoutManager list_layoutManager;
     private ArrayList<list_Data> listDataset;
+    // SQL DB의 레퍼런스
+    private SQLiteDatabase mDb;
 
     private ArrayList<String> list_category= new ArrayList<>();
     private ArrayList<String> list_place = new ArrayList<>();
@@ -92,13 +96,24 @@ public class MainFragment extends Fragment {
 
         System.out.println("메인 fragment oncreateview 수행 ");
 
+        ConsumeListDbHelper dbHelper = new ConsumeListDbHelper(getActivity());
+        // 데이터를 DB에 채우기 위함
+        mDb = dbHelper.getWritableDatabase();
+        // 자동적으로 다섯명의 손님을 DB에 추가
+        TestUtil.insertFakeData(mDb);
+        //커서에 결과를 저장
+        Cursor cursor = getAllGuests();
+
         //recyclerview
         list_recyclerView= v.findViewById(R.id.my_recycler_view); //activity_list_recycler 의 리스트 뷰
         list_recyclerView.setHasFixedSize(true);
         list_layoutManager=new LinearLayoutManager(getActivity());
         list_recyclerView.setLayoutManager(list_layoutManager);
         list_recyclerView.scrollToPosition(0);
-        list_Adapter = new list_Adapter(listDataset);
+
+        // 데이터를 표시할 커서를 위한 어댑터 생성
+        list_Adapter = new list_Adapter(getActivity(), cursor);
+        // 리사이클러뷰에 어댑터를 연결
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -161,7 +176,23 @@ public class MainFragment extends Fragment {
         }
     }
 
-
-
-
+    /*
+     * Cursor 는 SQL 쿼리의 결과물이 저장되어 있는 것이다.
+     * 반복문으로 쉽게 확인할 수 있다.
+     * */
+    // 손님의 목록을 보여주기 위해 시간 순서대로 결과를 보여준다.
+    private Cursor getAllGuests() {
+        // 두번째 파라미터 (Projection array)는 여러 열들 중에서 출력하고 싶은 것만 선택해서 출력할 수 있게 한다.
+        // 모든 열을 출력하고 싶을 때는 null 을 입력한다.
+        return mDb.query(
+                ConsumeListContract.ConsumeListEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+                //ConsumeListContract.ConsumeListEntry.COLUMN_DATE
+        );
+    }
 }

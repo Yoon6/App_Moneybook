@@ -193,22 +193,6 @@ public class MainActivity extends AppCompatActivity implements WriteFragment.Cus
         setStringArrayPref("state", stateData);
         System.out.println("저장");
 
-//        SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
-
-//        //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        String text = editText.getText().toString(); // 사용자가 입력한 저장할 데이터
-//        editor.putString("text",text); // key, value를 이용하여 저장하는 형태
-//        //다양한 형태의 변수값을 저장할 수 있다.
-//        //editor.putString();
-//        //editor.putBoolean();
-//        //editor.putFloat();
-//        //editor.putLong();
-//        //editor.putInt();
-//        //editor.putStringSet();
-//
-//        //최종 커밋
-//        editor.apply();
     }
 
 

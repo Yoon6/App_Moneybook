@@ -1,9 +1,12 @@
 package com.example.doit.wapproject2_test1;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,7 +49,10 @@ public class WriteFragment extends Fragment {
     private CustomOnClickListener customOnClickListener;
     private WriteValueSetListener writeValueSetListener;
 
+    // SQL DB의 레퍼런스
+    private SQLiteDatabase mDb;
 
+    // 프래그먼트 새로고침
     private void fg_refresh() {
         writeRadioButton1.setChecked(true);
         setDate();
@@ -55,6 +61,7 @@ public class WriteFragment extends Fragment {
         writeCategoryList.setSelection(0);
     }
 
+    // 날짜 세팅
     private void setDate(){
         // 날짜는 현재 날짜로 고정
         // 현재 시간 구하기
@@ -64,6 +71,7 @@ public class WriteFragment extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
         writeDate.setText(simpleDateFormat.format(date));
     }
+
     public interface CustomOnClickListener {
         void onSubmitClicked (View v);
     }
@@ -95,19 +103,11 @@ public class WriteFragment extends Fragment {
         setDate();
         submitBtn = v.findViewById(R.id.submitBtn);
         cancelBtn = v.findViewById(R.id.cancelBtn);
+        /*
         submitBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if(writeRadioButton1.isChecked()==true){
-                    radio_state="expense";
-                }else{
-                    radio_state="income";
-                }
-                paramState=radio_state;
-                paramCategory = writeCategoryList.getSelectedItem().toString();
-                paramCost = writeCost.getText().toString();
-                paramPlace = writePlace.getText().toString();
-                paramDate = writeDate.getText().toString();
+
                 if(paramCost.isEmpty() || Integer.parseInt(paramCost)==0){  // 가격을 기입하지 않을 경우 리스트에 요소 추가하지 않음
                     Toast.makeText(getActivity().getApplicationContext(),"양식을 완성해주세요.",Toast.LENGTH_LONG).show();
                 }
@@ -120,6 +120,8 @@ public class WriteFragment extends Fragment {
 
             }
         } );
+
+         */
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +152,7 @@ public class WriteFragment extends Fragment {
         customOnClickListener = (CustomOnClickListener)context;
     }
 
+    // 취소 경고창
     public void cancelMsg() {
         AlertDialog.Builder alert_confirm = new AlertDialog.Builder(getActivity());
         alert_confirm.setMessage("작성내용이 삭제됩니다.").setCancelable(false).setPositiveButton("확인",
@@ -170,5 +173,56 @@ public class WriteFragment extends Fragment {
         AlertDialog alert = alert_confirm.create();
         alert.show();
 
+    }
+
+    // 등록하기 버튼을 눌렀을 때 불리는 메서드
+    public void addToConsumelist(View view) {
+
+        if(writeRadioButton1.isChecked()==true){
+            radio_state="expense";
+        }else{
+            radio_state="income";
+        }
+        paramState=radio_state;
+        paramCategory = writeCategoryList.getSelectedItem().toString();
+        paramCost = writeCost.getText().toString();
+        paramPlace = writePlace.getText().toString();
+        paramDate = writeDate.getText().toString();
+
+        if (paramCost.isEmpty() || Integer.parseInt(paramCost)==0) {
+            return;
+        }
+
+        // 초기화
+        int cost = 1;
+        // 예기치 않은 에러 처리
+
+        try {
+            cost = Integer.parseInt(paramCost);
+        } catch (NumberFormatException ex) {
+            // 내용
+        }
+
+        // DB에 데이터 추가
+        addNewList(paramState, paramCategory, paramPlace, cost, paramDate);
+    }
+
+    // 새 데이터를 추가하는 메서드로, 추가되는 레코드의 아이디를 리턴한다.
+    private long addNewList(String state, String category, String place, int cost, String date) {
+        // DB에 데이터를 추가를 하기 위해선 ContentValue 객체를 사용해야 한다.
+        ContentValues cv = new ContentValues();
+        /*
+         * 열의 이름을 키로 해서 해당 값을 가리킨다.
+         * 값들을 put 메서드를 사용해 입력한다.
+         * 첫번째 파라미터는 열의 이름으로, Contract 로부터 가져올 수 있다.
+         * 두번째 파라미터는 값이다.
+         */
+        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_STATE, state);
+        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_CATEGORY, category);
+        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_PLACE, place);
+        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_COST, cost);
+        cv.put(ConsumeListContract.ConsumeListEntry.COLUMN_DATE, date);
+        // cv에 저장된 값을 사용하여 새로운 행을 추가한다.
+        return mDb.insert(ConsumeListContract.ConsumeListEntry.TABLE_NAME, null, cv);
     }
 }
