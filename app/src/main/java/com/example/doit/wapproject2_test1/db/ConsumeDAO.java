@@ -35,7 +35,7 @@ public class ConsumeDAO extends ConsumeDBDAO{
     }
 
     //Get all records from the database
-    public ArrayList<Consume> getConsmloyees() {
+    public ArrayList<Consume> getConsumes() {
         ArrayList<Consume> consumes = new ArrayList<Consume>();
 
         Cursor cursor = database.query(DataBaseHelper.CONSUME_TABLE,

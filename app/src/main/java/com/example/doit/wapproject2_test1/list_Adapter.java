@@ -73,3 +73,5 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
 
 }
+
+
