@@ -36,18 +36,13 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     Button submitBtn;
     Button cancelBtn;
 
-    String paramPlace;
-    String paramCost;
-    String paramCategory;
-    String paramDate;
-    String paramState;
-    String radio_state;
-
     RadioButton writeRadioButton1;
     RadioButton writeRadioButton2;
     EditText writePlace;
     EditText writeDate;
     EditText writeCost;
+
+    String radio_state;
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.KOREAN);
@@ -121,6 +116,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
         writeRadioButton1.setChecked(true);
         writePlace.setText(null);
         writeCost.setText(null);
+        writeDate.setText(null);
         writeCategoryList.setSelection(0);
     }
 
@@ -157,10 +153,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
         if (view == writeDate) {
             datePickerDialog.show();
         } else if (view == submitBtn) {
-            setConsume();
-
-            task = new AddEmpTask(getActivity());
-            task.execute((Void) null);
+            submitMsg();
         } else if (view == cancelBtn) {
             cancelMsg();
         }
@@ -168,10 +161,20 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     private void setConsume() {
         consume = new Consume();
-        consume.setCategory(writeCategoryList.getSelectedItem().toString());
 
+        if(writeRadioButton1.isChecked()==true){
+            radio_state="expense";
+        }else{
+            radio_state="income";
+        }
+
+        consume.setState(radio_state);
+        consume.setCategory(writeCategoryList.getSelectedItem().toString());
+        consume.setPlace(writePlace.getText().toString());
+        consume.setCost(writeCost.getText().toString());
         if (dateCalendar != null)
             consume.setDate(dateCalendar.getTime());
+
     }
 
     public class AddEmpTask extends AsyncTask<Void, Void, Long> {
@@ -193,8 +196,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
             if (activityWeakRef.get() != null
                     && !activityWeakRef.get().isFinishing()) {
                 if (result != -1)
-                    Toast.makeText(activityWeakRef.get(), "Consume Saved",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(activityWeakRef.get(), "완료!", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -207,6 +209,34 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
+                        fg_refresh();
+                    }
+                }).setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'No'
+                        return;
+                    }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
+
+    }
+
+    // 입력 확인창
+    public void submitMsg() {
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(getActivity());
+        alert_confirm.setMessage("작성내용을 입력합니다.").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 'YES'
+                        setConsume();
+
+                        task = new AddEmpTask(getActivity());
+                        task.execute((Void) null);
+
                         fg_refresh();
                     }
                 }).setNegativeButton("취소",
