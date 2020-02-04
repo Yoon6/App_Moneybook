@@ -1,6 +1,7 @@
 package com.example.doit.wapproject2_test1;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,18 +26,20 @@ import com.example.doit.wapproject2_test1.model.Consume;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
+/*
 
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     Activity activity;
     ConsumeDAO consumeDAO;
     private GetConsmTask task;
+    private Context context;
 
     //recyclerview
     private RecyclerView list_recyclerView;
     private RecyclerView.Adapter list_Adapter;
     private RecyclerView.LayoutManager list_layoutManager;
-    private ArrayList<list_Data> listDataset;
+    private ArrayList<Consume> consumes;
 
     private ArrayList<String> list_category= new ArrayList<>();
     private ArrayList<String> list_place = new ArrayList<>();
@@ -93,7 +96,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         list_layoutManager=new LinearLayoutManager(getActivity());
         list_recyclerView.setLayoutManager(list_layoutManager);
         list_recyclerView.scrollToPosition(0);
-        list_Adapter = new list_Adapter(listDataset);
+        list_Adapter = new list_Adapter(context, consumes);
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -103,7 +106,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     public void prepareData(){
 
-        listDataset = new ArrayList<>();
+        //listDataset = new ArrayList<>();
 
         //컴마찍는 함수
         DecimalFormat formatter=new DecimalFormat("###,###,###");
@@ -117,9 +120,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             list_price_final[i]=formatter.format(list_price_int);
             //recyclerview
             if(list_state.get(i).equals("expense")) {
-                listDataset.add(new list_Data(list_category.get(i), list_place.get(i), "-" + list_price_final[i], list_date.get(i)));
+                //listDataset.add(new list_Data(list_category.get(i), list_place.get(i), "-" + list_price_final[i], list_date.get(i)));
             }else if(list_state.get(i).equals("income")){
-                listDataset.add(new list_Data(list_category.get(i), list_place.get(i), "+" + list_price_final[i],list_date.get(i)));
+                //listDataset.add(new list_Data(list_category.get(i), list_place.get(i), "+" + list_price_final[i],list_date.get(i)));
 
             }
 
@@ -144,7 +147,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             if (activityWeakRef.get() != null
                     && !activityWeakRef.get().isFinishing()) {
                 Log.d("employees", consmList.toString());
-                employees = consmList;
+                consumes = consmList;
                 if (consmList != null) {
                     if (consmList.size() != 0) {
                         list_Adapter = new list_Adapter(activity,
@@ -198,3 +201,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         return true;
     }
 }
+
+
+ */

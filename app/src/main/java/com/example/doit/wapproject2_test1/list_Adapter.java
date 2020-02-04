@@ -1,14 +1,20 @@
 package com.example.doit.wapproject2_test1;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.doit.wapproject2_test1.model.Consume;
+
 import java.util.ArrayList;
+/*
 
 public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder> {
-    private ArrayList<list_Data> list_Dataset;
+    private ArrayList<Consume> consumes;
+    private Context context;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -35,9 +41,10 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public list_Adapter(ArrayList<list_Data> listDataset) {
+    public list_Adapter(Context context, ArrayList<Consume> consumes) {
 
-        list_Dataset = listDataset;
+        this.context=context;
+        this.consumes = consumes;
     }
 
     // Create new views (invoked by the layout manager)
@@ -57,21 +64,22 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.textView_category.setText(list_Dataset.get(position).category);
-        holder.textView_place.setText(list_Dataset.get(position).place);
-        holder.textView_price.setText(list_Dataset.get(position).price);
-        holder.recycler_list_Date.setText(list_Dataset.get(position).date);
+        // holder.textView_category.setText(list_Dataset.get(position).category);
+        // holder.textView_place.setText(list_Dataset.get(position).place);
+        // holder.textView_price.setText(list_Dataset.get(position).price);
+        // holder.recycler_list_Date.setText(list_Dataset.get(position).date);
    }
 
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-
-        return list_Dataset.size();
-    }
+     // Return the size of your dataset (invoked by the layout manager)
+     @Override
+     public int getItemCount() {
+         return consumes.size();
+     }
 
 
 
 }
 
+
+ */
 

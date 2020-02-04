@@ -83,11 +83,17 @@
         card_view:layout_constraintVertical_bias="0.13999999"
         tools:layout_editor_absoluteX="10dp">
 
-        <android.support.v7.widget.RecyclerView
+        <!--android.support.v7.widget.RecyclerView
             android:id="@+id/my_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical" /-->
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
     </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>

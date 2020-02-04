@@ -12,9 +12,10 @@ public class MainActivity extends AppCompatActivity {
 
     //bottomNavi
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private MainFragment mainFragment = new MainFragment();
+    //private MainFragment mainFragment = new MainFragment();
     private WriteFragment writeFragment = new WriteFragment();
     private SettingFragment settingFragment = new SettingFragment();
+    private FragmentPage2 fragmentPage2 = new FragmentPage2();
 
 
     @Override
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         //bottomNavi
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, mainFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.nav_host_fragment, fragmentPage2).commitAllowingStateLoss();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     switch(menuItem.getItemId())
                     {
                         case R.id.ic_main:
-                            transaction.replace(R.id.nav_host_fragment, mainFragment).commitAllowingStateLoss();
+                            transaction.replace(R.id.nav_host_fragment, fragmentPage2).commitAllowingStateLoss();
                             break;
                         case R.id.ic_write:
                             transaction.replace(R.id.nav_host_fragment, writeFragment).commitAllowingStateLoss();
