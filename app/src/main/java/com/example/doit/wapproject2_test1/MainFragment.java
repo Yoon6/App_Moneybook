@@ -4,18 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.example.doit.wapproject2_test1.model.Consume;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
-/*
 
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -165,7 +163,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     private void findViewsById(View v) {
         totalMoney = v.findViewById(R.id.totalMoney);
-        list_recyclerView= v.findViewById(R.id.my_recycler_view); //activity_list_recycler 의 리스트 뷰
+        //list_recyclerView= v.findViewById(R.id.my_recycler_view); //activity_list_recycler 의 리스트 뷰
     }
 
     @Override
@@ -202,5 +200,3 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 }
 
-
- */

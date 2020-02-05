@@ -6,9 +6,9 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +52,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     Consume consume = null;
     private ConsumeDAO consumeDAO;
-    private AddEmpTask task;
+    private AddConsmTask task;
 
 
     @Override
@@ -177,11 +177,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public class AddEmpTask extends AsyncTask<Void, Void, Long> {
+    public class AddConsmTask extends AsyncTask<Void, Void, Long> {
 
         private final WeakReference<Activity> activityWeakRef;
 
-        public AddEmpTask(Activity context) {
+        public AddConsmTask(Activity context) {
             this.activityWeakRef = new WeakReference<Activity>(context);
         }
 
@@ -234,7 +234,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                         // 'YES'
                         setConsume();
 
-                        task = new AddEmpTask(getActivity());
+                        task = new AddConsmTask(getActivity());
                         task.execute((Void) null);
 
                         fg_refresh();

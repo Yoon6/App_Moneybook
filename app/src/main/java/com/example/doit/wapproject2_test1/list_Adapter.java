@@ -1,7 +1,7 @@
 package com.example.doit.wapproject2_test1;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.doit.wapproject2_test1.model.Consume;
 
 import java.util.ArrayList;
-/*
 
 public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder> {
     private ArrayList<Consume> consumes;
@@ -79,7 +78,4 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
 
 }
-
-
- */
 

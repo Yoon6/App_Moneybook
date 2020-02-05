@@ -3,7 +3,7 @@ package com.example.doit.wapproject2_test1;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +34,7 @@ public class FragmentPage2 extends Fragment implements OnItemClickListener,
     ConsmListAdapter consumeListAdapter;
     ConsumeDAO consumeDAO;
 
-    private GetEmpTask task;
+    private GetConsmTask task;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class FragmentPage2 extends Fragment implements OnItemClickListener,
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         findViewsById(view);
 
-        task = new GetEmpTask(activity);
+        task = new GetConsmTask(activity);
         task.execute((Void) null);
 
         consumeListView.setOnItemClickListener(this);
@@ -96,11 +96,12 @@ public class FragmentPage2 extends Fragment implements OnItemClickListener,
         return true;
     }
 
-    public class GetEmpTask extends AsyncTask<Void, Void, ArrayList<Consume>> {
+
+    public class GetConsmTask extends AsyncTask<Void, Void, ArrayList<Consume>> {
 
         private final WeakReference<Activity> activityWeakRef;
 
-        public GetEmpTask(Activity context) {
+        public GetConsmTask(Activity context) {
             this.activityWeakRef = new WeakReference<Activity>(context);
         }
 
@@ -137,7 +138,7 @@ public class FragmentPage2 extends Fragment implements OnItemClickListener,
      * This is used for communicating between fragments.
      */
     public void updateView() {
-        task = new GetEmpTask(activity);
+        task = new GetConsmTask(activity);
         task.execute((Void) null);
     }
 }
