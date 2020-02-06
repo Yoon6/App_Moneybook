@@ -21,7 +21,9 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.doit.wapproject2_test1.dao.ConsmDAO;
 import com.example.doit.wapproject2_test1.db.ConsumeDAO;
+import com.example.doit.wapproject2_test1.entity.ConsumeEntity;
 import com.example.doit.wapproject2_test1.model.Consume;
 
 import java.lang.ref.WeakReference;
@@ -43,6 +45,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     EditText writeCost;
 
     String radio_state;
+
+    AppDatabase db;
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.KOREAN);
@@ -68,6 +72,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
         final View v = inflater.inflate(R.layout.fragment_write, container, false);
 
         findViewsById(v);
+
+        db = AppDatabase.getAppDatabase(getActivity());
 
         // 스피너
         final String [] values =
@@ -232,10 +238,17 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
-                        setConsume();
+                        //setConsume();
+//
+                        //task = new AddConsmTask(getActivity());
+                        //task.execute((Void) null);
 
-                        task = new AddConsmTask(getActivity());
-                        task.execute((Void) null);
+                        if(Integer.parseInt(writeCost.getText().toString()) != 0) {
+                            Toast.makeText(getActivity(), "한글자 이상입력해주세요.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            new InsertAsyncTask(db.consmDAO()).execute(new ConsumeEntity());
+
+                        }
 
                         fg_refresh();
                     }
@@ -252,4 +265,20 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
+    public static class InsertAsyncTask extends AsyncTask<ConsumeEntity, Void, Void> {
+        public ConsmDAO consmDAO;
+
+        public  InsertAsyncTask(ConsmDAO consmDAO){
+            this.consmDAO = consmDAO;
+        }
+
+        @Override //백그라운드작업(메인스레드 X)
+        protected Void doInBackground(ConsumeEntity... consms) {
+            //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
+            //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
+            ConsmDAO.insert(consms[0]);
+            return null;
+        }
+    }
 }
