@@ -2,31 +2,52 @@ package com.example.doit.wapproject2_test1;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.doit.wapproject2_test1.dao.ConsmDAO;
-import com.example.doit.wapproject2_test1.entity.ConsumeEntity;
+import com.example.doit.wapproject2_test1.dao.ConsumeDao;
+import com.example.doit.wapproject2_test1.entity.Consume;
 
-@Database(version = 1, entities = {ConsumeEntity.class})
-abstract class AppDatabase extends RoomDatabase {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-    private static AppDatabase INSTANCE;
+@Database(entities = {Consume.class}, version = 1, exportSchema = false)
+public abstract class AppDatabase extends RoomDatabase {
 
-    public abstract ConsmDAO consmDAO();
+    public abstract ConsumeDao consumeDao();
 
-    // DB객체 생성 가져오기
-    public static AppDatabase getAppDatabase(Context context){
+    private static volatile AppDatabase INSTANCE;
+    private static final int NUMBER_OF_THREADS =4;
+    static final ExecutorService databaseWriteExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
+    static AppDatabase getDatabase(final Context context){
         if(INSTANCE == null){
-            INSTANCE = Room.databaseBuilder(context, AppDatabase.class, "consume").build();
+            synchronized (AppDatabase.class){
+                if(INSTANCE == null){
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            AppDatabase.class, "app_database").addCallback(sAppDatabaseCallback)
+                            .build();
+                }
+            }
         }
         return INSTANCE;
     }
 
-    // DB객체 삭제
-    public static void destroyInstance() {
+    private static RoomDatabase.Callback sAppDatabaseCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db){
+            super.onOpen(db);
 
-    }
+            databaseWriteExecutor.execute(() -> {
+                ConsumeDao dao = INSTANCE.consumeDao();
 
+                Consume consume = new Consume("10,000");
+                dao.insert(consume);
+            });
+        }
+    };
 }

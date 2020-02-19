@@ -20,24 +20,25 @@ import android.widget.Toast;
 
 
 import com.example.doit.wapproject2_test1.db.ConsumeDAO;
+import com.example.doit.wapproject2_test1.entity.ConsumeEntity;
 import com.example.doit.wapproject2_test1.model.Consume;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     Activity activity;
     ConsumeDAO consumeDAO;
-    private GetConsmTask task;
     private Context context;
 
     //recyclerview
     private RecyclerView list_recyclerView;
     private RecyclerView.Adapter list_Adapter;
     private RecyclerView.LayoutManager list_layoutManager;
-    private ArrayList<Consume> consumes;
+    private List<ConsumeEntity> consumes;
 
     private ArrayList<String> list_category= new ArrayList<>();
     private ArrayList<String> list_place = new ArrayList<>();
@@ -94,7 +95,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         list_layoutManager=new LinearLayoutManager(getActivity());
         list_recyclerView.setLayoutManager(list_layoutManager);
         list_recyclerView.scrollToPosition(0);
-        list_Adapter = new list_Adapter(context, consumes);
+        list_Adapter = new list_Adapter(consumes);
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -124,40 +125,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
             }
 
-        }
-    }
-    public class GetConsmTask extends AsyncTask<Void, Void, ArrayList<Consume>> {
-
-        private final WeakReference<Activity> activityWeakRef;
-
-        public GetConsmTask(Activity context) {
-            this.activityWeakRef = new WeakReference<Activity>(context);
-        }
-
-        @Override
-        protected ArrayList<Consume> doInBackground(Void... arg0) {
-            ArrayList<Consume> employeeList = consumeDAO.getConsumes();
-            return employeeList;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Consume> consmList) {
-            if (activityWeakRef.get() != null
-                    && !activityWeakRef.get().isFinishing()) {
-                Log.d("employees", consmList.toString());
-                consumes = consmList;
-                if (consmList != null) {
-                    if (consmList.size() != 0) {
-                        list_Adapter = new list_Adapter(activity,
-                                consmList);
-                        list_recyclerView.setAdapter(list_Adapter);
-                    } else {
-                        Toast.makeText(activity, "No Employee Records",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            }
         }
     }
 

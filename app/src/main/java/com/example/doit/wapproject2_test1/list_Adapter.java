@@ -7,75 +7,57 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.doit.wapproject2_test1.model.Consume;
 
-import java.util.ArrayList;
+import com.example.doit.wapproject2_test1.entity.Consume;
+import java.util.List;
 
 public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder> {
-    private ArrayList<Consume> consumes;
-    private Context context;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        private final TextView wordItemView;
 
-        // each data item is just a string in this case
-        public TextView textView_category;
-        public TextView textView_place;
-        public TextView textView_price;
-        public TextView recycler_list_Date;
-
-        public MyViewHolder(View view) {
-            super(view);
-
-            textView_category = view.findViewById(R.id.textView_recycler_category);
-            textView_place = view.findViewById(R.id.textView_recycler_place);
-            textView_price = view.findViewById(R.id.textView_recycler_price);
-            recycler_list_Date=view.findViewById(R.id.recycler_list_Date);
-
-
+        private MyViewHolder(View itemView) {
+            super(itemView);
+            wordItemView = itemView.findViewById(R.id.textView_recycler_price);
         }
-
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public list_Adapter(Context context, ArrayList<Consume> consumes) {
+    private final LayoutInflater mInflater;
+    private List<Consume> mConsumes; // Cached copy of words
 
-        this.context=context;
-        this.consumes = consumes;
-    }
+    public list_Adapter(Context context) { mInflater = LayoutInflater.from(context); }
 
-    // Create new views (invoked by the layout manager)
     @Override
-    public list_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_writelist_recyclerview, parent, false);
-
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = mInflater.inflate(R.layout.fragment_writelist_recyclerview, parent, false);
+        return new MyViewHolder(itemView);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        // holder.textView_category.setText(list_Dataset.get(position).category);
-        // holder.textView_place.setText(list_Dataset.get(position).place);
-        // holder.textView_price.setText(list_Dataset.get(position).price);
-        // holder.recycler_list_Date.setText(list_Dataset.get(position).date);
-   }
-
-     // Return the size of your dataset (invoked by the layout manager)
-     @Override
-     public int getItemCount() {
-         return consumes.size();
-     }
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        if (mConsumes != null) {
+            Consume current = mConsumes.get(position);
+            holder.wordItemView.setText(current.getPrice());
+        } else {
+            // Covers the case of data not being ready yet.
+            holder.wordItemView.setText("No Word");
+        }
+    }
 
 
+    public void setConsumes(List<Consume> consumes){
+        mConsumes = consumes;
+        notifyDataSetChanged();
+    }
+
+    // getItemCount() is called many times, and when it is first called,
+    // mWords has not been updated (means initially, it's null, and we can't return null).
+    @Override
+    public int getItemCount() {
+        if (mConsumes != null)
+            return mConsumes.size();
+        else return 0;
+    }
 
 }
 

@@ -21,12 +21,6 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.doit.wapproject2_test1.dao.ConsmDAO;
-import com.example.doit.wapproject2_test1.db.ConsumeDAO;
-import com.example.doit.wapproject2_test1.entity.ConsumeEntity;
-import com.example.doit.wapproject2_test1.model.Consume;
-
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,7 +40,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     String radio_state;
 
-    AppDatabase db;
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.KOREAN);
@@ -54,16 +47,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     DatePickerDialog datePickerDialog;
     Calendar dateCalendar;
 
-    Consume consume = null;
-    private ConsumeDAO consumeDAO;
-    private AddConsmTask task;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        consumeDAO = new ConsumeDAO(getActivity());
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -73,7 +56,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
         findViewsById(v);
 
-        db = AppDatabase.getAppDatabase(getActivity());
 
         // 스피너
         final String [] values =
@@ -126,12 +108,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
         writeCategoryList.setSelection(0);
     }
 
-    @Override
-    public void onResume() {
-        //getActivity().setTitle(R.string.add_emp);
-        //getActivity().getActionBar().setTitle(R.string.add_emp);
-        super.onResume();
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -162,48 +138,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
             submitMsg();
         } else if (view == cancelBtn) {
             cancelMsg();
-        }
-    }
-
-    private void setConsume() {
-        consume = new Consume();
-
-        if(writeRadioButton1.isChecked()==true){
-            radio_state="expense";
-        }else{
-            radio_state="income";
-        }
-
-        consume.setState(radio_state);
-        consume.setCategory(writeCategoryList.getSelectedItem().toString());
-        consume.setPlace(writePlace.getText().toString());
-        consume.setCost(writeCost.getText().toString());
-        if (dateCalendar != null)
-            consume.setDate(dateCalendar.getTime());
-
-    }
-
-    public class AddConsmTask extends AsyncTask<Void, Void, Long> {
-
-        private final WeakReference<Activity> activityWeakRef;
-
-        public AddConsmTask(Activity context) {
-            this.activityWeakRef = new WeakReference<Activity>(context);
-        }
-
-        @Override
-        protected Long doInBackground(Void... arg0) {
-            long result = consumeDAO.save(consume);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(Long result) {
-            if (activityWeakRef.get() != null
-                    && !activityWeakRef.get().isFinishing()) {
-                if (result != -1)
-                    Toast.makeText(activityWeakRef.get(), "완료!", Toast.LENGTH_LONG).show();
-            }
         }
     }
 
@@ -238,17 +172,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
-                        //setConsume();
-//
-                        //task = new AddConsmTask(getActivity());
-                        //task.execute((Void) null);
-
-                        if(Integer.parseInt(writeCost.getText().toString()) != 0) {
-                            Toast.makeText(getActivity(), "한글자 이상입력해주세요.", Toast.LENGTH_SHORT).show();
-                        }else{
-                            new InsertAsyncTask(db.consmDAO()).execute(new ConsumeEntity());
-
-                        }
 
                         fg_refresh();
                     }
@@ -265,20 +188,4 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
-    public static class InsertAsyncTask extends AsyncTask<ConsumeEntity, Void, Void> {
-        public ConsmDAO consmDAO;
-
-        public  InsertAsyncTask(ConsmDAO consmDAO){
-            this.consmDAO = consmDAO;
-        }
-
-        @Override //백그라운드작업(메인스레드 X)
-        protected Void doInBackground(ConsumeEntity... consms) {
-            //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
-            //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
-            ConsmDAO.insert(consms[0]);
-            return null;
-        }
-    }
 }
