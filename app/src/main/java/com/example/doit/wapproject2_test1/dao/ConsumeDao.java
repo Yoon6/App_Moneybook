@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.doit.wapproject2_test1.entity.Consume;
@@ -16,7 +17,7 @@ public interface ConsumeDao {
     @Query("SELECT * FROM Consume")
     LiveData<List<Consume>> getAll();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Consume consumes);
 
     @Delete
