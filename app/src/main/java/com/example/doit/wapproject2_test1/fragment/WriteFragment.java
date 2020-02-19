@@ -1,15 +1,17 @@
-package com.example.doit.wapproject2_test1;
+package com.example.doit.wapproject2_test1.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +23,15 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.doit.wapproject2_test1.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class WriteFragment extends Fragment implements View.OnClickListener {
     Spinner writeCategoryList;
@@ -40,6 +47,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
     String radio_state;
 
+    public static final String EXTRA_REPLY = "com.example.doit.wordlistsql.REPLY";
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat(
             "yyyy-MM-dd", Locale.KOREAN);
@@ -172,6 +180,15 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
+
+                        Intent replyIntent = new Intent();
+                        if (TextUtils.isEmpty(writeCost.getText())) {
+                            getActivity().setResult(RESULT_CANCELED, replyIntent);
+                        } else {
+                            String word = writeCost.getText().toString();
+                            replyIntent.putExtra(EXTRA_REPLY, word);
+                            getActivity().setResult(RESULT_OK, replyIntent);
+                        }
 
                         fg_refresh();
                     }
