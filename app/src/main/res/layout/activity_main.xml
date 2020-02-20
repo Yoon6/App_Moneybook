@@ -8,18 +8,22 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical">
 
-<com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/nav_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    card_view:itemIconTint="#000000"
-    card_view:itemTextColor="#000000"
-    card_view:menu="@menu/bottom_nav_menu"
-    card_view:layout_constraintBottom_toBottomOf="parent">
 
-</com.google.android.material.bottomnavigation.BottomNavigationView>
-<FrameLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#ffffff"
+        card_view:itemIconTint="#000000"
+        card_view:itemTextColor="#000000"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:menu="@menu/bottom_nav_menu" />
+
+    <FrameLayout
     android:id="@+id/nav_host_fragment"
     android:layout_width="match_parent"
     android:layout_height="0dp"
