@@ -196,8 +196,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:paddingLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
         android:inputType="date"
-        android:hint="YYYY년MM월DD일"/>
+
+        android:hint="YYYY-MM-DD"/>
         </LinearLayout>
         </androidx.cardview.widget.CardView>
 

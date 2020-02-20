@@ -184,13 +184,17 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
                         Intent replyIntent = new Intent();
                         if (TextUtils.isEmpty(writeCost.getText())) {
+                            System.out.println("Write 값이 없음");
                             getActivity().setResult(RESULT_CANCELED, replyIntent);
                         } else {
+                            System.out.println("Write 인텐트 시작");
                             String word = writeCost.getText().toString();
                             replyIntent.putExtra(EXTRA_REPLY, word);
                             getActivity().setResult(RESULT_OK, replyIntent);
+                            System.out.println("Write 인텐트 끝");
                         }
 
+                        getActivity().finish();
                         fg_refresh();
                     }
                 }).setNegativeButton("취소",

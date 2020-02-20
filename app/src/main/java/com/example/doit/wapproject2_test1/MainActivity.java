@@ -1,8 +1,10 @@
 package com.example.doit.wapproject2_test1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
+import com.example.doit.wapproject2_test1.entity.Consume;
 import com.example.doit.wapproject2_test1.fragment.MainFragment;
 import com.example.doit.wapproject2_test1.fragment.SettingFragment;
 import com.example.doit.wapproject2_test1.fragment.WriteFragment;
@@ -13,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ViewModel mViewModel;
+    public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
 
     //bottomNavi
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -59,5 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 }

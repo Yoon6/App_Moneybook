@@ -84,14 +84,17 @@ public class MainFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("메인프래그먼트-OnActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_CONSUME_FRAGMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+            System.out.println("뷰모델에 인서트");
             Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
             mViewModel.insert(consume);
         } else {
 
         }
     }
+
 }
 
