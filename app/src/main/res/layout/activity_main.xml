@@ -15,6 +15,7 @@ android:orientation="vertical">
     android:layout_gravity="bottom"
     card_view:itemIconTint="#000000"
     card_view:itemTextColor="#000000"
+    android:background="#ffffff"
     card_view:menu="@menu/bottom_nav_menu"
     card_view:layout_constraintBottom_toBottomOf="parent">
 

@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.doit.wapproject2_test1.R;
@@ -42,7 +43,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     RadioButton writeRadioButton1;
     RadioButton writeRadioButton2;
     EditText writePlace;
-    EditText writeDate;
+    TextView writeDate;
     EditText writeCost;
 
     String radio_state;
