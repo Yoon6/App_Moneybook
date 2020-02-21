@@ -192,6 +192,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
                             bundle.putString("cost", Cost);
                             replyIntent.putExtras(bundle);
+                            //assdf
 
                             startActivityForResult(replyIntent, 102);
                         } else {
