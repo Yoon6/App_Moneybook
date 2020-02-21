@@ -17,7 +17,7 @@ public interface ConsumeDao {
     @Query("SELECT * FROM Consume")
     LiveData<List<Consume>> getAll();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     void insert(Consume consumes);
 
     @Delete

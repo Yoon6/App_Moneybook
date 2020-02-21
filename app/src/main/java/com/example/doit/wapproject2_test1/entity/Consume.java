@@ -6,8 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-//@Entity(tableName = "consume")
-@Entity
+@Entity(tableName = "consume")
 public class Consume {
 
     /*
@@ -17,9 +16,10 @@ public class Consume {
      */
 
     //@ColumnInfo(name = "state")
-    @PrimaryKey
-    @NonNull
-    @ColumnInfo(name = "price")
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    //@ColumnInfo(name = "price")
+
     public String mPrice;
     public String mDate;
     public String mPlace;
@@ -32,6 +32,14 @@ public class Consume {
         this.mCategory = category;
     }
 
+    public void setId(int id){
+        this.id =id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public String getPrice(){
         return this.mPrice;
     }
@@ -41,11 +49,4 @@ public class Consume {
     public String getDate() {return  this.mDate; }
 
     public String getCategory() {return  this.mCategory; }
-
-    /*
-    public String state;
-    public String category;
-    public String cost;
-    public String date;
-    */
 }

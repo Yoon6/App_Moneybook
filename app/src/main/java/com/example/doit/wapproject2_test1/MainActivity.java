@@ -43,12 +43,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
-        Intent intent = getIntent();
 
-        Bundle bundle = intent.getExtras();
-
-        Fragment fragment = new MainFragment();
-        fragment.setArguments(bundle);
     }
 
     // 바텀 내비게이션바 클릭 트랜잭션

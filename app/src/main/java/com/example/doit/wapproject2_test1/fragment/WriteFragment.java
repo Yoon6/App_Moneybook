@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.doit.wapproject2_test1.MainActivity;
 import com.example.doit.wapproject2_test1.R;
+import com.example.doit.wapproject2_test1.SubActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -183,7 +184,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
 
-                        Intent replyIntent = new Intent(getActivity().getBaseContext(), MainActivity.class);
+                        Intent replyIntent = new Intent(getActivity().getBaseContext(), SubActivity.class);
 
                         if(!(TextUtils.isEmpty(writeCost.getText()) && TextUtils.isEmpty(writeDate.getText()) && TextUtils.isEmpty(writePlace.getText()))) {
                             String Cost = writeCost.getText().toString();
@@ -200,7 +201,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                             replyIntent.putExtras(bundle);
                             //assdf
 
-                            startActivityForResult(replyIntent, 102);
+                            getActivity().startActivity(replyIntent);
                         } else {
 
                         }
