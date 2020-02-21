@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -65,7 +66,21 @@ public class MainFragment extends Fragment {
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
+
         ViewModel model = ViewModelProviders.of(getActivity()).get(ViewModel.class);
+
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            String cost = bundle.getString("cost");
+            String date = bundle.getString("date");
+            String place = bundle.getString("place");
+            String category = bundle.getString("category");
+
+
+            Consume consume_cost = new Consume(place, cost, date, category);
+            mViewModel.insert(consume_cost);
+        }
+
         model.getAllWords().observe(this, new Observer<List<Consume>>() {
             @Override
             public void onChanged(@NonNull List<Consume> consumes) {
@@ -89,8 +104,8 @@ public class MainFragment extends Fragment {
 
         if (requestCode == NEW_CONSUME_FRAGMENT_REQUEST_CODE && resultCode == RESULT_OK) {
             System.out.println("뷰모델에 인서트");
-            Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
-            mViewModel.insert(consume);
+            //Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
+            //mViewModel.insert(consume);
         } else {
 
         }

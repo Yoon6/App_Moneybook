@@ -185,12 +185,18 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
                         Intent replyIntent = new Intent(getActivity().getBaseContext(), MainActivity.class);
 
-                        if(!TextUtils.isEmpty(writeCost.getText())) {
+                        if(!(TextUtils.isEmpty(writeCost.getText()) && TextUtils.isEmpty(writeDate.getText()) && TextUtils.isEmpty(writePlace.getText()))) {
                             String Cost = writeCost.getText().toString();
+                            String Date = writeDate.getText().toString();
+                            String Place = writePlace.getText().toString();
+                            String Category = writeCategoryList.getSelectedItem().toString();
 
                             Bundle bundle = new Bundle();
 
                             bundle.putString("cost", Cost);
+                            bundle.putString("date", Date);
+                            bundle.putString("place", Place);
+                            bundle.putString("category", Category);
                             replyIntent.putExtras(bundle);
                             //assdf
 

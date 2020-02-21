@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle bundle = intent.getExtras();
 
-        Fragment MainFragment = new Fragment();
-
+        Fragment fragment = new MainFragment();
+        fragment.setArguments(bundle);
     }
 
     // 바텀 내비게이션바 클릭 트랜잭션

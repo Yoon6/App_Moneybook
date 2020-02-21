@@ -14,11 +14,15 @@ import java.util.List;
 public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder> {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        private final TextView wordItemView;
+        private final TextView costview;
+        private final TextView categoryvew;
+        private final TextView placeview;
 
         private MyViewHolder(View itemView) {
             super(itemView);
-            wordItemView = itemView.findViewById(R.id.textView_recycler_price);
+            costview = itemView.findViewById(R.id.textView_recycler_price);
+            placeview = itemView.findViewById(R.id.textView_recycler_place);
+            categoryvew = itemView.findViewById(R.id.textView_recycler_category);
         }
     }
 
@@ -37,10 +41,14 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if (mConsumes != null) {
             Consume current = mConsumes.get(position);
-            holder.wordItemView.setText(current.getPrice());
+            holder.costview.setText(current.getPrice());
+            holder.categoryvew.setText(current.getCategory());
+            holder.placeview.setText(current.getPlace());
         } else {
             // Covers the case of data not being ready yet.
-            holder.wordItemView.setText("No Word");
+            holder.costview.setText("Default");
+            holder.placeview.setText("Default");
+            holder.categoryvew.setText("Default");
         }
     }
 

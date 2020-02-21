@@ -17,19 +17,30 @@ public class Consume {
      */
 
     //@ColumnInfo(name = "state")
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "price")
     public String mPrice;
+    public String mDate;
+    public String mPlace;
+    public String mCategory;
 
-    public Consume(String price){
+    public Consume(String place, String price, String date, String category){
+        this.mPlace = place;
         this.mPrice = price;
+        this.mDate = date;
+        this.mCategory = category;
     }
 
     public String getPrice(){
         return this.mPrice;
     }
+
+    public String getPlace() { return this.mPlace;}
+
+    public String getDate() {return  this.mDate; }
+
+    public String getCategory() {return  this.mCategory; }
 
     /*
     public String state;

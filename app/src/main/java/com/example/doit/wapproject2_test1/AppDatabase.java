@@ -45,8 +45,8 @@ public abstract class AppDatabase extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 ConsumeDao dao = INSTANCE.consumeDao();
 
-                Consume consume = new Consume("10,000");
-                dao.insert(consume);
+                Consume consume_cost = new Consume("hou","1000","1000-10-10","hou");
+                dao.insert(consume_cost);
             });
         }
     };
