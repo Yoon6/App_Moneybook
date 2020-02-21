@@ -9,6 +9,8 @@ import com.example.doit.wapproject2_test1.fragment.MainFragment;
 import com.example.doit.wapproject2_test1.fragment.SettingFragment;
 import com.example.doit.wapproject2_test1.fragment.WriteFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
+
+        Intent intent = getIntent();
+
+        Bundle bundle = intent.getExtras();
+
+        Fragment MainFragment = new Fragment();
 
     }
 

@@ -24,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.doit.wapproject2_test1.MainActivity;
 import com.example.doit.wapproject2_test1.R;
 
 import java.text.SimpleDateFormat;
@@ -182,7 +183,22 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
 
-                        Intent replyIntent = new Intent();
+                        Intent replyIntent = new Intent(getActivity().getBaseContext(), MainActivity.class);
+
+                        if(!TextUtils.isEmpty(writeCost.getText())) {
+                            String Cost = writeCost.getText().toString();
+
+                            Bundle bundle = new Bundle();
+
+                            bundle.putString("cost", Cost);
+                            replyIntent.putExtras(bundle);
+                            //assdf
+
+                            startActivityForResult(replyIntent, 102);
+                        } else {
+
+                        }
+                        /*
                         if (TextUtils.isEmpty(writeCost.getText())) {
                             System.out.println("Write 값이 없음");
                             getActivity().setResult(RESULT_CANCELED, replyIntent);
@@ -195,6 +211,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                         }
 
                         getActivity().finish();
+                         */
+
                         fg_refresh();
                     }
                 }).setNegativeButton("취소",
