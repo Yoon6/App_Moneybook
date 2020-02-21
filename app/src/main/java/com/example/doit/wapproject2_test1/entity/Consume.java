@@ -17,7 +17,8 @@ public class Consume {
      */
 
     //@ColumnInfo(name = "state")
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     @NonNull
     @ColumnInfo(name = "price")
     public String mPrice;
