@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.example.doit.wapproject2_test1.R;
 import com.example.doit.wapproject2_test1.ViewModel;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -92,6 +93,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     private void setListeners() {
         writeDate.setOnClickListener(this);
         Calendar newCalendar = Calendar.getInstance();
+        Calendar maxDate = Calendar.getInstance();
+
         datePickerDialog = new DatePickerDialog(getActivity(),
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -106,6 +109,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                 }, newCalendar.get(Calendar.YEAR),
                 newCalendar.get(Calendar.MONTH),
                 newCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+        long now = System.currentTimeMillis();
+        Date mdate = new Date(now);
+        datePickerDialog.getDatePicker().setMaxDate(mdate.getTime());
 
         submitBtn.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
@@ -190,8 +198,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                             String Date = writeDate.getText().toString();
                             String Place = writePlace.getText().toString();
                             String Category = writeCategoryList.getSelectedItem().toString();
-
-                            CharSequence input = Cost;
 
                             Bundle bundle = new Bundle();
 

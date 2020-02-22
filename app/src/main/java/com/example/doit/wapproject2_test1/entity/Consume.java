@@ -25,11 +25,11 @@ public class Consume {
     public String Place;
     public String Category;
 
-    public Consume(String place, int price, String date, String category){
-        this.Place = place;
-        this.Cost = price;
-        this.Date = date;
-        this.Category = category;
+    public Consume(String Place, int Cost, String Date, String Category){
+        this.Place = Place;
+        this.Cost = Cost;
+        this.Date = Date;
+        this.Category = Category;
     }
 
     public void setId(int id){
