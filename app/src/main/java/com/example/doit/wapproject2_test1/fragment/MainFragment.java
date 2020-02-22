@@ -65,28 +65,30 @@ public class MainFragment extends Fragment {
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
-
-        ViewModel model = ViewModelProviders.of(getActivity()).get(ViewModel.class);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
 
         Bundle bundle = this.getArguments();
         if(bundle != null){
-            String cost = bundle.getString("cost");
+            int cost = Integer.parseInt(bundle.getString("cost"));
             String date = bundle.getString("date");
             String place = bundle.getString("place");
             String category = bundle.getString("category");
 
-
             Consume consume_cost = new Consume(place, cost, date, category);
             mViewModel.insert(consume_cost);
+            Toast.makeText(getActivity(),"추가 완료",Toast.LENGTH_SHORT).show();
         }
 
-        model.getAllWords().observe(this, new Observer<List<Consume>>() {
+
+
+        mViewModel.getAllConsumes().observe(this, new Observer<List<Consume>>() {
             @Override
             public void onChanged(@NonNull List<Consume> consumes) {
                 list_Adapter.setConsumes(consumes);
             }
         });
+
+
 
         return v;
     }
@@ -97,6 +99,8 @@ public class MainFragment extends Fragment {
         //getActivity().getActionBar().setTitle(R.string.app_name);
         super.onResume();
     }
+
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("메인프래그먼트-OnActivityResult");

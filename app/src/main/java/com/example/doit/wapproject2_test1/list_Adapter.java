@@ -9,9 +9,14 @@ import android.widget.TextView;
 
 
 import com.example.doit.wapproject2_test1.entity.Consume;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder> {
+
+    private final LayoutInflater mInflater;
+    private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private final TextView costview;
@@ -26,9 +31,6 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
         }
     }
 
-    private final LayoutInflater mInflater;
-    private List<Consume> mConsumes; // Cached copy of words
-
     public list_Adapter(Context context) { mInflater = LayoutInflater.from(context); }
 
     @Override
@@ -39,9 +41,9 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        if (mConsumes != null) {
-            Consume current = mConsumes.get(position);
-            holder.costview.setText(current.getPrice());
+        if (consumes != null) {
+            Consume current = consumes.get(position);
+            holder.costview.setText(current.getCost() + "");
             holder.categoryvew.setText(current.getCategory());
             holder.placeview.setText(current.getPlace());
         } else {
@@ -54,7 +56,7 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
 
     public void setConsumes(List<Consume> consumes){
-        mConsumes = consumes;
+        this.consumes = consumes;
         notifyDataSetChanged();
     }
 
@@ -62,8 +64,8 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     // mWords has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
-        if (mConsumes != null)
-            return mConsumes.size();
+        if (consumes != null)
+            return consumes.size();
         else return 0;
     }
 

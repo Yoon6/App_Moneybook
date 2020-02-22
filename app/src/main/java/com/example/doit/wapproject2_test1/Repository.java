@@ -1,6 +1,7 @@
 package com.example.doit.wapproject2_test1;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Database;
@@ -12,9 +13,99 @@ import java.util.List;
 
 public class Repository  {
 
-    private ConsumeDao mConsumeDao;
-    private LiveData<List<Consume>> mAllConsumes;
+    private ConsumeDao consumeDao;
+    private LiveData<List<Consume>> allConsumes;
 
+    Repository(Application application) {
+        AppDatabase database = AppDatabase.getInstance(application);
+        consumeDao = database.consumeDao();
+        allConsumes = consumeDao.getAllConsumes();
+    }
+
+    public void insert(Consume consume){
+        new InsertConsumeAsyncTask(consumeDao).execute(consume);
+    }
+
+    public void update(Consume consume) {
+        new UpdateConsumeAsyncTask(consumeDao).execute(consume);
+    }
+
+    public void delete(Consume consume) {
+        new DeleteConsumeAsyncTask(consumeDao).execute(consume);
+    }
+
+    public  void deleteAllconsume() {
+        new DeleteAllConsumeAsyncTask(consumeDao).execute();
+
+    }
+
+    public LiveData<List<Consume>> getAllConsumes() {
+        return allConsumes;
+    }
+
+    private static class InsertConsumeAsyncTask extends AsyncTask<Consume, Void, Void> {
+
+        private ConsumeDao consumeDao;
+
+        private InsertConsumeAsyncTask(ConsumeDao consumeDao) {
+            this.consumeDao = consumeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Consume... consumes) {
+            consumeDao.insert(consumes[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateConsumeAsyncTask extends AsyncTask<Consume, Void, Void> {
+
+        private ConsumeDao consumeDao;
+
+        private UpdateConsumeAsyncTask(ConsumeDao consumeDao) {
+            this.consumeDao = consumeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Consume... consumes) {
+            consumeDao.update(consumes[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteConsumeAsyncTask extends AsyncTask<Consume, Void, Void> {
+
+        private ConsumeDao consumeDao;
+
+        private DeleteConsumeAsyncTask(ConsumeDao consumeDao) {
+            this.consumeDao = consumeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Consume... consumes) {
+            consumeDao.delete(consumes[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAllConsumeAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private ConsumeDao consumeDao;
+
+        private DeleteAllConsumeAsyncTask(ConsumeDao consumeDao) {
+            this.consumeDao = consumeDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            consumeDao.deleteAllConsumes();
+            return null;
+        }
+    }
+
+
+
+    /*
     // Note that in order to unit test the WordRepository, you have to remove the Application
     // dependency. This adds complexity and much more code, and this sample is not about testing.
     // See the BasicSample in the android-architecture-components repository at
@@ -38,4 +129,6 @@ public class Repository  {
             mConsumeDao.insert(consume);
         });
     }
+
+     */
 }
