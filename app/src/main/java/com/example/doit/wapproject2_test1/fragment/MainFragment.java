@@ -1,51 +1,24 @@
 package com.example.doit.wapproject2_test1.fragment;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.doit.wapproject2_test1.PreferenceManager;
 import com.example.doit.wapproject2_test1.R;
-import com.example.doit.wapproject2_test1.ViewModel;
-import com.example.doit.wapproject2_test1.entity.Consume;
-import com.example.doit.wapproject2_test1.list_Adapter;
 
-import java.text.DecimalFormat;
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class MainFragment extends Fragment {
 
-    private ViewModel mViewModel;
-    public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
-
-    //recyclerview
-    private RecyclerView list_recyclerView;
-    private list_Adapter list_Adapter;
-    private RecyclerView.LayoutManager list_layoutManager;
-
-    private TextView totalM;
-    private int totalMoney = 0;
-    private Context mContext;
+    private OnFragmentInteractionListener mListener;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
@@ -58,87 +31,43 @@ public class MainFragment extends Fragment {
 
     }
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_main,container,false);
 
-        DecimalFormat format = new DecimalFormat("###,###,###,###");
-
-        mContext = getActivity();
-        totalM=v.findViewById(R.id.totalMoney);
-
-        //recyclerview
-        list_recyclerView= v.findViewById(R.id.my_recycler_view);
-        list_recyclerView.setHasFixedSize(true);
-        list_layoutManager=new LinearLayoutManager(getActivity());
-        list_recyclerView.setLayoutManager(list_layoutManager);
-        list_recyclerView.scrollToPosition(0);
-        list_Adapter = new list_Adapter(getActivity());
-        list_recyclerView.setAdapter(list_Adapter);
-        list_recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        totalMoney = PreferenceManager.getInt(mContext, "total");
-        totalM.setText(format.format(totalMoney));
-
-        // Frag <-> ViewModel
-        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
-
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            String state = bundle.getString("state");
-            int cost = Integer.parseInt(bundle.getString("cost")); // 돈
-            String date = bundle.getString("date");
-            String place = bundle.getString("place");
-            String category = bundle.getString("category");
-
-            totalMoney = PreferenceManager.getInt(mContext, "total");
-            if(state == "-"){
-                totalMoney = totalMoney - cost;
-            }else{
-                totalMoney = totalMoney + cost;
-            }
-            PreferenceManager.setInt(mContext, "total", totalMoney);
-            totalM.setText(format.format(totalMoney));
-
-
-            Consume consume_cost = new Consume(state, place, cost, date, category);
-            mViewModel.insert(consume_cost);
-            Toast.makeText(getActivity(),"추가 완료",Toast.LENGTH_SHORT).show();
-        }
-
-        mViewModel.getAllConsumes().observe(this, new Observer<List<Consume>>() {
-            @Override
-            public void onChanged(@NonNull List<Consume> consumes) {
-                list_Adapter.setConsumes(consumes);
-            }
-        });
-
-        //
-
-
         return v;
     }
 
+
     @Override
-    public void onResume() {
-        //getActivity().setTitle(R.string.app_name);
-        //getActivity().getActionBar().setTitle(R.string.app_name);
-        super.onResume();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Fragment listfragment1 = new List_MainFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.child_fragment_container, listfragment1).commit();
     }
 
-
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("메인프래그먼트-OnActivityResult");
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == NEW_CONSUME_FRAGMENT_REQUEST_CODE && resultCode == RESULT_OK) {
-            System.out.println("뷰모델에 인서트");
-            //Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
-            //mViewModel.insert(consume);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
-
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void messageFromParentFragment(Uri uri);
     }
 
 }

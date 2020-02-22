@@ -215,10 +215,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                            MainFragment mainFragment = new MainFragment();
-                            mainFragment.setArguments(bundle);
+                            List_MainFragment list_mainFragment = new List_MainFragment();
+                            list_mainFragment.setArguments(bundle);
 
-                            fragmentTransaction.replace(R.id.nav_host_fragment, mainFragment);
+                            fragmentTransaction.replace(R.id.nav_host_fragment, list_mainFragment);
                             fragmentTransaction.commit();
 
                         } else {

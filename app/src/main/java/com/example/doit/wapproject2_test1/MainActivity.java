@@ -1,14 +1,17 @@
 package com.example.doit.wapproject2_test1;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.example.doit.wapproject2_test1.entity.Consume;
+import com.example.doit.wapproject2_test1.fragment.List_MainFragment;
 import com.example.doit.wapproject2_test1.fragment.MainFragment;
 import com.example.doit.wapproject2_test1.fragment.SettingFragment;
 import com.example.doit.wapproject2_test1.fragment.WriteFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,13 +19,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MainFragment.OnFragmentInteractionListener, List_MainFragment.OnFragmentInteractionListener {
 
     private ViewModel mViewModel;
     public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
+    private ViewPager mViewPager;
 
     //bottomNavi
     private FragmentManager fragmentManager = getSupportFragmentManager();
@@ -38,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         //bottomNavi
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, mainFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.nav_host_fragment, new MainFragment());
+        transaction.commit();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
@@ -67,8 +75,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+    }
 
+    @Override
+    public void messageFromParentFragment(Uri uri) {
+        Log.i("TAG", "received communication from parent fragment");
+    }
 
+    @Override
+    public void messageFromChildFragment(Uri uri) {
+        Log.i("TAG", "received communication from child fragment");
     }
 
 
