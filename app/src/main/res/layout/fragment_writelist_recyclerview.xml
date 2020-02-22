@@ -49,6 +49,7 @@
                 android:orientation="horizontal"
                 android:layout_weight="0.5"
                 android:weightSum="1">
+
                 <TextView
                     android:id="@+id/textView_recycler_price"
                     android:layout_width="match_parent"
@@ -57,7 +58,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/colorPrimaryDark"
                     android:gravity="center_vertical|right"
-                    android:layout_weight="0.3"/>
+                    android:layout_weight="0.2"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -66,7 +67,7 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.8"
                     />
 
             </LinearLayout>
@@ -79,7 +80,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="yyyy년MM월dd일"
+        android:text="yyyy-MM-dd"
         android:textSize="10sp"
         android:background="@color/colorPrimaryDark"
         android:textColor="#ffffff"

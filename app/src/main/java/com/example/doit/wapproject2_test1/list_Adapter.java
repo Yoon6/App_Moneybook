@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.doit.wapproject2_test1.entity.Consume;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,17 +18,23 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
     private final LayoutInflater mInflater;
     private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
+    DecimalFormat format = new DecimalFormat("###,###,###,###");
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private final TextView costview;
-        private final TextView categoryvew;
+        private final TextView categoryview;
         private final TextView placeview;
+        private final TextView dateview;
+
 
         private MyViewHolder(View itemView) {
             super(itemView);
+
             costview = itemView.findViewById(R.id.textView_recycler_price);
             placeview = itemView.findViewById(R.id.textView_recycler_place);
-            categoryvew = itemView.findViewById(R.id.textView_recycler_category);
+            categoryview = itemView.findViewById(R.id.textView_recycler_category);
+            dateview = itemView.findViewById(R.id.recycler_list_Date);
+
         }
     }
 
@@ -43,14 +50,17 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if (consumes != null) {
             Consume current = consumes.get(position);
-            holder.costview.setText(current.getCost() + "");
-            holder.categoryvew.setText(current.getCategory());
+
+            holder.costview.setText(current.getState() + " " + format.format(current.getCost()));
+            holder.categoryview.setText(current.getCategory());
             holder.placeview.setText(current.getPlace());
+            holder.dateview.setText(current.getDate());
         } else {
             // Covers the case of data not being ready yet.
             holder.costview.setText("Default");
             holder.placeview.setText("Default");
-            holder.categoryvew.setText("Default");
+            holder.categoryview.setText("Default");
+            holder.dateview.setText("Default");
         }
     }
 

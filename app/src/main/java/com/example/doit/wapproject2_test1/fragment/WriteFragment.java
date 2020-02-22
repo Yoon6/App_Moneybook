@@ -194,6 +194,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                         // 'YES'
 
                         if(!(TextUtils.isEmpty(writeCost.getText()) && TextUtils.isEmpty(writeDate.getText()) && TextUtils.isEmpty(writePlace.getText()))) {
+                            if(writeRadioButton1.isChecked() == true){
+                                radio_state = "-";
+                            }else{
+                                radio_state = "+";
+                            }
                             String Cost = writeCost.getText().toString();
                             String Date = writeDate.getText().toString();
                             String Place = writePlace.getText().toString();
@@ -201,6 +206,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
                             Bundle bundle = new Bundle();
 
+                            bundle.putString("state", radio_state);
                             bundle.putString("cost", Cost);
                             bundle.putString("date", Date);
                             bundle.putString("place", Place);
@@ -211,6 +217,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
                             MainFragment mainFragment = new MainFragment();
                             mainFragment.setArguments(bundle);
+
                             fragmentTransaction.replace(R.id.nav_host_fragment, mainFragment);
                             fragmentTransaction.commit();
 

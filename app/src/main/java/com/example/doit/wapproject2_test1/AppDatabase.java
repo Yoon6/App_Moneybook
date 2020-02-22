@@ -51,7 +51,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            consumeDao.insert(new Consume("메우",20000,null,"Hou!!!"));
+            //consumeDao.insert(new Consume("-","메우",20000,"2017-01-12","Hou!!!"));
             return null;
         }
     }
