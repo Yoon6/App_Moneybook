@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -64,14 +65,30 @@ public class MainFragment extends Fragment {
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
 
-        ViewModel model = ViewModelProviders.of(getActivity()).get(ViewModel.class);
-        model.getAllWords().observe(this, new Observer<List<Consume>>() {
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            int cost = Integer.parseInt(bundle.getString("cost"));
+            String date = bundle.getString("date");
+            String place = bundle.getString("place");
+            String category = bundle.getString("category");
+
+            Consume consume_cost = new Consume(place, cost, date, category);
+            mViewModel.insert(consume_cost);
+            Toast.makeText(getActivity(),"추가 완료",Toast.LENGTH_SHORT).show();
+        }
+
+
+
+        mViewModel.getAllConsumes().observe(this, new Observer<List<Consume>>() {
             @Override
             public void onChanged(@NonNull List<Consume> consumes) {
                 list_Adapter.setConsumes(consumes);
             }
         });
+
+
 
         return v;
     }
@@ -83,14 +100,16 @@ public class MainFragment extends Fragment {
         super.onResume();
     }
 
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.out.println("메인프래그먼트-OnActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_CONSUME_FRAGMENT_REQUEST_CODE && resultCode == RESULT_OK) {
             System.out.println("뷰모델에 인서트");
-            Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
-            mViewModel.insert(consume);
+            //Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
+            //mViewModel.insert(consume);
         } else {
 
         }

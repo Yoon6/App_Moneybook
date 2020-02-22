@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
 
-        Intent intent = getIntent();
-
-        Bundle bundle = intent.getExtras();
-
-        Fragment MainFragment = new Fragment();
 
     }
 

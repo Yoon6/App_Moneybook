@@ -9,21 +9,27 @@ import android.widget.TextView;
 
 
 import com.example.doit.wapproject2_test1.entity.Consume;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder> {
 
+    private final LayoutInflater mInflater;
+    private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
+
     class MyViewHolder extends RecyclerView.ViewHolder {
-        private final TextView wordItemView;
+        private final TextView costview;
+        private final TextView categoryvew;
+        private final TextView placeview;
 
         private MyViewHolder(View itemView) {
             super(itemView);
-            wordItemView = itemView.findViewById(R.id.textView_recycler_price);
+            costview = itemView.findViewById(R.id.textView_recycler_price);
+            placeview = itemView.findViewById(R.id.textView_recycler_place);
+            categoryvew = itemView.findViewById(R.id.textView_recycler_category);
         }
     }
-
-    private final LayoutInflater mInflater;
-    private List<Consume> mConsumes; // Cached copy of words
 
     public list_Adapter(Context context) { mInflater = LayoutInflater.from(context); }
 
@@ -35,18 +41,22 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        if (mConsumes != null) {
-            Consume current = mConsumes.get(position);
-            holder.wordItemView.setText(current.getPrice());
+        if (consumes != null) {
+            Consume current = consumes.get(position);
+            holder.costview.setText(current.getCost() + "");
+            holder.categoryvew.setText(current.getCategory());
+            holder.placeview.setText(current.getPlace());
         } else {
             // Covers the case of data not being ready yet.
-            holder.wordItemView.setText("No Word");
+            holder.costview.setText("Default");
+            holder.placeview.setText("Default");
+            holder.categoryvew.setText("Default");
         }
     }
 
 
     public void setConsumes(List<Consume> consumes){
-        mConsumes = consumes;
+        this.consumes = consumes;
         notifyDataSetChanged();
     }
 
@@ -54,8 +64,8 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     // mWords has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
-        if (mConsumes != null)
-            return mConsumes.size();
+        if (consumes != null)
+            return consumes.size();
         else return 0;
     }
 

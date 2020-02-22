@@ -1,15 +1,15 @@
 package com.example.doit.wapproject2_test1.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,21 +22,20 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.doit.wapproject2_test1.MainActivity;
 import com.example.doit.wapproject2_test1.R;
+import com.example.doit.wapproject2_test1.ViewModel;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-
 public class WriteFragment extends Fragment implements View.OnClickListener {
     Spinner writeCategoryList;
+
+    private ViewModel viewModel;
 
     Button submitBtn;
     Button cancelBtn;
@@ -57,6 +56,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     DatePickerDialog datePickerDialog;
     Calendar dateCalendar;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -90,6 +93,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     private void setListeners() {
         writeDate.setOnClickListener(this);
         Calendar newCalendar = Calendar.getInstance();
+        Calendar maxDate = Calendar.getInstance();
+
         datePickerDialog = new DatePickerDialog(getActivity(),
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -104,6 +109,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                 }, newCalendar.get(Calendar.YEAR),
                 newCalendar.get(Calendar.MONTH),
                 newCalendar.get(Calendar.DAY_OF_MONTH));
+
+
+        long now = System.currentTimeMillis();
+        Date mdate = new Date(now);
+        datePickerDialog.getDatePicker().setMaxDate(mdate.getTime());
 
         submitBtn.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
@@ -183,18 +193,27 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         // 'YES'
 
-                        Intent replyIntent = new Intent(getActivity().getBaseContext(), MainActivity.class);
-
-                        if(!TextUtils.isEmpty(writeCost.getText())) {
+                        if(!(TextUtils.isEmpty(writeCost.getText()) && TextUtils.isEmpty(writeDate.getText()) && TextUtils.isEmpty(writePlace.getText()))) {
                             String Cost = writeCost.getText().toString();
+                            String Date = writeDate.getText().toString();
+                            String Place = writePlace.getText().toString();
+                            String Category = writeCategoryList.getSelectedItem().toString();
 
                             Bundle bundle = new Bundle();
 
                             bundle.putString("cost", Cost);
-                            replyIntent.putExtras(bundle);
-                            //assdf
+                            bundle.putString("date", Date);
+                            bundle.putString("place", Place);
+                            bundle.putString("category", Category);
 
-                            startActivityForResult(replyIntent, 102);
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                            MainFragment mainFragment = new MainFragment();
+                            mainFragment.setArguments(bundle);
+                            fragmentTransaction.replace(R.id.nav_host_fragment, mainFragment);
+                            fragmentTransaction.commit();
+
                         } else {
 
                         }

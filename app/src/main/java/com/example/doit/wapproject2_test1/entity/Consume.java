@@ -6,8 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-//@Entity(tableName = "consume")
-@Entity
+@Entity(tableName = "consume_table")
 public class Consume {
 
     /*
@@ -19,22 +18,35 @@ public class Consume {
     //@ColumnInfo(name = "state")
     @PrimaryKey(autoGenerate = true)
     private int id;
-    @NonNull
-    @ColumnInfo(name = "price")
-    public String mPrice;
+    //@ColumnInfo(name = "price")
 
-    public Consume(String price){
-        this.mPrice = price;
+    public int Cost;
+    public String Date;
+    public String Place;
+    public String Category;
+
+    public Consume(String Place, int Cost, String Date, String Category){
+        this.Place = Place;
+        this.Cost = Cost;
+        this.Date = Date;
+        this.Category = Category;
     }
 
-    public String getPrice(){
-        return this.mPrice;
+    public void setId(int id){
+        this.id =id;
     }
 
-    /*
-    public String state;
-    public String category;
-    public String cost;
-    public String date;
-    */
+    public int getId() {
+        return id;
+    }
+
+    public int getCost(){
+        return this.Cost;
+    }
+
+    public String getPlace() { return this.Place;}
+
+    public String getDate() {return  this.Date; }
+
+    public String getCategory() {return  this.Category; }
 }
