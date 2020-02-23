@@ -1,6 +1,8 @@
 package com.example.doit.wapproject2_test1.fragment;
 
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import com.example.doit.wapproject2_test1.R;
  */
 public class Calendar_MainFragment extends Fragment {
 
+    private List_MainFragment.OnFragmentInteractionListener mListener;
 
     public Calendar_MainFragment() {
         // Required empty public constructor
@@ -27,9 +30,32 @@ public class Calendar_MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_list__main, container, false);
+        View v = inflater.inflate(R.layout.fragment_calendar__main, container, false);
 
         return  v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof List_MainFragment.OnFragmentInteractionListener) {
+            mListener = (List_MainFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void messageFromChildFragment(Uri uri);
     }
 
 }
