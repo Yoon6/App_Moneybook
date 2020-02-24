@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -45,6 +46,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     EditText writePlace;
     TextView writeDate;
     EditText writeCost;
+    CardView cardViewCategory;
+    TextView textViewCategory;
+
 
     String radio_state;
 
@@ -69,6 +73,23 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
         findViewsById(v);
 
+        View.OnClickListener first_radio_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cardViewCategory.setVisibility(View.VISIBLE);
+            }
+        };
+        
+        View.OnClickListener second_radio_listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cardViewCategory.setVisibility(View.GONE);
+            }
+        };
+
+
+        writeRadioButton1.setOnClickListener(first_radio_listener);
+        writeRadioButton2.setOnClickListener(second_radio_listener);
 
         // 스피너
         final String [] values =
@@ -148,6 +169,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
         submitBtn = v.findViewById(R.id.submitBtn);
         cancelBtn = v.findViewById(R.id.cancelBtn);
+
+        cardViewCategory = v.findViewById(R.id.card_view_write3);
+        textViewCategory = v.findViewById(R.id.textView2);
     }
 
     @Override

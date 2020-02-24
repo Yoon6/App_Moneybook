@@ -100,6 +100,7 @@ public class List_MainFragment extends Fragment {
                 totalMoney = totalMoney - cost;
             }else{
                 totalMoney = totalMoney + cost;
+                category = "수입";
             }
             PreferenceManager.setInt(mContext, "total", totalMoney);
             totalM.setText(format.format(totalMoney));
