@@ -73,23 +73,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
         findViewsById(v);
 
-        View.OnClickListener first_radio_listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cardViewCategory.setVisibility(View.VISIBLE);
-            }
-        };
-        
-        View.OnClickListener second_radio_listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cardViewCategory.setVisibility(View.GONE);
-            }
-        };
 
-
-        writeRadioButton1.setOnClickListener(first_radio_listener);
-        writeRadioButton2.setOnClickListener(second_radio_listener);
+        writeRadioButton1.setOnClickListener(this::onClick);
+        writeRadioButton2.setOnClickListener(this::onClick);
 
         // 스피너
         final String [] values =
@@ -182,6 +168,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
             submitMsg();
         } else if (view == cancelBtn) {
             cancelMsg();
+        } else if (view == writeRadioButton1){
+            cardViewCategory.setVisibility(View.VISIBLE);
+        } else if (view == writeRadioButton2){
+            cardViewCategory.setVisibility(View.GONE);
         }
     }
 
