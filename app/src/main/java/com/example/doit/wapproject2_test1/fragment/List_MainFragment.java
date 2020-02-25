@@ -27,8 +27,14 @@ import com.example.doit.wapproject2_test1.ViewModel;
 import com.example.doit.wapproject2_test1.entity.Consume;
 import com.example.doit.wapproject2_test1.list_Adapter;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.List;
+
+import devs.mulham.horizontalcalendar.HorizontalCalendar;
+import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,8 +53,10 @@ public class List_MainFragment extends Fragment {
     private com.example.doit.wapproject2_test1.list_Adapter list_Adapter;
     private RecyclerView.LayoutManager list_layoutManager;
 
-    private TextView totalM;
-    private int totalMoney = 0;
+    private TextView text_income;
+    private TextView text_spend;
+    private int spendMoney = 0;
+    private int incomeMoney = 0;
     private Context mContext;
 
     @Override
@@ -69,7 +77,28 @@ public class List_MainFragment extends Fragment {
         DecimalFormat format = new DecimalFormat("###,###,###,###");
 
         mContext = getActivity();
-        totalM=v.findViewById(R.id.totalMoney);
+        //totalM=v.findViewById(R.id.totalMoney);
+
+        /* starts before 1 month from now */
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -1);
+
+        /* ends after 1 month from now */
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 1);
+
+        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(v, R.id.calendarView)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(7)
+                .build();
+
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+                //do something
+            }
+        });
+
 
         //recyclerview
         list_recyclerView= v.findViewById(R.id.my_recycler_view);
@@ -81,8 +110,8 @@ public class List_MainFragment extends Fragment {
         list_recyclerView.setAdapter(list_Adapter);
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        totalMoney = PreferenceManager.getInt(mContext, "total");
-        totalM.setText(format.format(totalMoney));
+        //totalMoney = PreferenceManager.getInt(mContext, "total");
+        //totalM.setText(format.format(totalMoney));
 
         // Frag <-> ViewModel
         mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
@@ -90,19 +119,20 @@ public class List_MainFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if(bundle != null){
             String state = bundle.getString("state");
-            int cost = Integer.parseInt(bundle.getString("cost")); // 돈
+            String cost = bundle.getString("cost"); // 돈
             String date = bundle.getString("date");
             String place = bundle.getString("place");
             String category = bundle.getString("category");
 
-            totalMoney = PreferenceManager.getInt(mContext, "total");
+            //totalMoney = PreferenceManager.getInt(mContext, "total");
             if(state == "-"){
-                totalMoney = totalMoney - cost;
+                //totalMoney = totalMoney - cost;
             }else{
-                totalMoney = totalMoney + cost;
+                //totalMoney = totalMoney + cost;
+                category = "수입";
             }
-            PreferenceManager.setInt(mContext, "total", totalMoney);
-            totalM.setText(format.format(totalMoney));
+            //PreferenceManager.setInt(mContext, "total", totalMoney);
+            //totalM.setText(format.format(totalMoney));
 
 
             Consume consume_cost = new Consume(state, place, cost, date, category);

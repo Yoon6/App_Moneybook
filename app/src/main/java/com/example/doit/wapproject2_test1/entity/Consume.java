@@ -21,12 +21,12 @@ public class Consume {
     //@ColumnInfo(name = "price")
 
     public String State;
-    public int Cost;
+    public String Cost;
     public String Date;
     public String Place;
     public String Category;
 
-    public Consume(String State, String Place, int Cost, String Date, String Category){
+    public Consume(String State, String Place, String Cost, String Date, String Category){
         this.State = State;
         this.Place = Place;
         this.Cost = Cost;
@@ -42,7 +42,7 @@ public class Consume {
         return id;
     }
 
-    public int getCost(){
+    public String getCost(){
         return this.Cost;
     }
 

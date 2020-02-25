@@ -3,88 +3,56 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:weightSum="100"
+    android:layout_height="80dp"
     android:layout_marginBottom="5dp">
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:weightSum="1"
-        android:layout_weight="99"
         >
 
         <TextView
-            android:id="@+id/textView_recycler_category"
+            android:id="@+id/textView_recycler_place"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Category"
+            android:text="Place"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/colorPrimaryDark"
-            android:layout_weight="0.6"/>
+            android:layout_weight="0.7"/>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.4"
+            android:layout_weight="0.3"
             android:weightSum="1"
             >
             <TextView
-                android:id="@+id/textView_recycler_place"
+                android:id="@+id/textView_recycler_price"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Place"
-                android:gravity="center_vertical|right"
-                android:paddingRight="50dp"
+                android:gravity="center_vertical"
+                android:text="Cost"
+                android:textColor="#000000"
+                android:paddingLeft="15dp"
                 android:textSize="20sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_weight="0.5"/>
-            <LinearLayout
+                android:layout_weight="0.4"/>
+            <TextView
+                android:id="@+id/textView_recycler_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_weight="0.5"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textView_recycler_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Cost"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:gravity="center_vertical|right"
-                    android:layout_weight="0.2"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="원"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:layout_weight="0.8"
-                    />
-
-            </LinearLayout>
+                android:gravity="center_vertical"
+                android:text="Category"
+                android:paddingLeft="15dp"
+                android:textSize="15sp"
+                android:layout_weight="0.6"/>
 
         </LinearLayout>
 
     </LinearLayout>
-    <TextView
-        android:id="@+id/recycler_list_Date"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="yyyy-MM-dd"
-        android:textSize="10sp"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="#ffffff"
-        android:gravity="center"
-        />
 
 </LinearLayout>

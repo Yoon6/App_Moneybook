@@ -2,6 +2,8 @@ package com.example.doit.wapproject2_test1;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +20,12 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
 
     private final LayoutInflater mInflater;
     private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
-    DecimalFormat format = new DecimalFormat("###,###,###,###");
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private final TextView costview;
         private final TextView categoryview;
         private final TextView placeview;
-        private final TextView dateview;
+        //private final TextView dateview;
 
 
         private MyViewHolder(View itemView) {
@@ -33,7 +34,7 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
             costview = itemView.findViewById(R.id.textView_recycler_price);
             placeview = itemView.findViewById(R.id.textView_recycler_place);
             categoryview = itemView.findViewById(R.id.textView_recycler_category);
-            dateview = itemView.findViewById(R.id.recycler_list_Date);
+            //dateview = itemView.findViewById(R.id.recycler_list_Date);
 
         }
     }
@@ -50,17 +51,20 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if (consumes != null) {
             Consume current = consumes.get(position);
+            holder.costview.setText(current.getState() + " " + current.getCost() + " 원");
 
-            holder.costview.setText(current.getState() + " " + format.format(current.getCost()));
+            if(current.getState().equals("-")) {
+                holder.costview.setTextColor(Color.parseColor("#e57f8f"));
+            }
             holder.categoryview.setText(current.getCategory());
             holder.placeview.setText(current.getPlace());
-            holder.dateview.setText(current.getDate());
+            //holder.dateview.setText(current.getDate());
         } else {
             // Covers the case of data not being ready yet.
             holder.costview.setText("Default");
             holder.placeview.setText("Default");
             holder.categoryview.setText("Default");
-            holder.dateview.setText("Default");
+            //holder.dateview.setText("Default");
         }
     }
 

@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +26,18 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.doit.wapproject2_test1.NumberTextWatcher;
 import com.example.doit.wapproject2_test1.R;
 import com.example.doit.wapproject2_test1.ViewModel;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class WriteFragment extends Fragment implements View.OnClickListener {
+public class WriteFragment extends Fragment implements View.OnClickListener{
     Spinner writeCategoryList;
 
     private ViewModel viewModel;
@@ -45,8 +50,13 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
     EditText writePlace;
     TextView writeDate;
     EditText writeCost;
+    CardView cardViewCategory;
+    TextView textViewCategory;
+
 
     String radio_state;
+    DecimalFormat format = new DecimalFormat("###,###,###,###");
+    String edt_cost = "";
 
     public static final String EXTRA_REPLY = "com.example.doit.wordlistsql.REPLY";
 
@@ -68,6 +78,16 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
         final View v = inflater.inflate(R.layout.fragment_write, container, false);
 
         findViewsById(v);
+
+
+        writeRadioButton1.setOnClickListener(this::onClick);
+        writeRadioButton2.setOnClickListener(this::onClick);
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        String getCurrentTime = formatter.format(mDate);
+        writeDate.setText(getCurrentTime);
+
+        writeCost.addTextChangedListener(new NumberTextWatcher(writeCost));
 
 
         // 스피너
@@ -148,6 +168,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
 
         submitBtn = v.findViewById(R.id.submitBtn);
         cancelBtn = v.findViewById(R.id.cancelBtn);
+
+        cardViewCategory = v.findViewById(R.id.card_view_write3);
+        textViewCategory = v.findViewById(R.id.textView2);
     }
 
     @Override
@@ -158,6 +181,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener {
             submitMsg();
         } else if (view == cancelBtn) {
             cancelMsg();
+        } else if (view == writeRadioButton1){
+            cardViewCategory.setVisibility(View.VISIBLE);
+        } else if (view == writeRadioButton2){
+            cardViewCategory.setVisibility(View.GONE);
         }
     }
 
