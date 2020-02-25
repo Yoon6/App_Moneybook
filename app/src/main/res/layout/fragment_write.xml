@@ -130,6 +130,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
+        android:maxLength="15"
+        android:maxEms="5"
         android:hint="항목" />
         </LinearLayout>
         </androidx.cardview.widget.CardView>
