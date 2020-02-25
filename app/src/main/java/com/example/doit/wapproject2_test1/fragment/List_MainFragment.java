@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class List_MainFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ViewModel mViewModel;
+
     public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
 
     //recyclerview
@@ -87,6 +89,7 @@ public class List_MainFragment extends Fragment {
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
 
+
         HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(v, R.id.calendarView)
                 .range(startDate, endDate)
                 .datesNumberOnScreen(7)
@@ -106,39 +109,18 @@ public class List_MainFragment extends Fragment {
         list_layoutManager=new LinearLayoutManager(getActivity());
         list_recyclerView.setLayoutManager(list_layoutManager);
         list_recyclerView.scrollToPosition(0);
+
         list_Adapter = new list_Adapter(getActivity());
         list_recyclerView.setAdapter(list_Adapter);
+
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
 
         //totalMoney = PreferenceManager.getInt(mContext, "total");
         //totalM.setText(format.format(totalMoney));
 
         // Frag <-> ViewModel
-        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
-
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            String state = bundle.getString("state");
-            String cost = bundle.getString("cost"); // 돈
-            String date = bundle.getString("date");
-            String place = bundle.getString("place");
-            String category = bundle.getString("category");
-
-            //totalMoney = PreferenceManager.getInt(mContext, "total");
-            if(state == "-"){
-                //totalMoney = totalMoney - cost;
-            }else{
-                //totalMoney = totalMoney + cost;
-                category = "수입";
-            }
-            //PreferenceManager.setInt(mContext, "total", totalMoney);
-            //totalM.setText(format.format(totalMoney));
-
-
-            Consume consume_cost = new Consume(state, place, cost, date, category);
-            mViewModel.insert(consume_cost);
-            Toast.makeText(getActivity(),"추가 완료",Toast.LENGTH_SHORT).show();
-        }
 
         mViewModel.getAllConsumes().observe(this, new Observer<List<Consume>>() {
             @Override

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.doit.wapproject2_test1.fragment.WriteFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/list_main_layout">
 
     <devs.mulham.horizontalcalendar.HorizontalCalendarView
         android:id="@+id/calendarView"

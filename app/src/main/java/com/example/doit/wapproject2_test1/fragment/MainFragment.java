@@ -43,11 +43,15 @@ public class MainFragment extends Fragment {
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_main,container,false);
 
+
+
         ViewPager viewPager = (ViewPager) v.findViewById(R.id.child_fragment_container);
         setupViewPager(viewPager);
         // Set Tabs inside Toolbar
         TabLayout tabs = (TabLayout) v.findViewById(R.id.result_tabs);
         tabs.setupWithViewPager(viewPager);
+
+
 
         return v;
     }

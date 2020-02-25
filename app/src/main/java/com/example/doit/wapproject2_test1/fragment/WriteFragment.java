@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.text.Editable;
 import android.text.InputType;
@@ -25,10 +26,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.doit.wapproject2_test1.NumberTextWatcher;
 import com.example.doit.wapproject2_test1.R;
 import com.example.doit.wapproject2_test1.ViewModel;
+import com.example.doit.wapproject2_test1.entity.Consume;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -40,7 +43,7 @@ import java.util.Locale;
 public class WriteFragment extends Fragment implements View.OnClickListener{
     Spinner writeCategoryList;
 
-    private ViewModel viewModel;
+    private ViewModel mViewModel;
 
     Button submitBtn;
     Button cancelBtn;
@@ -218,6 +221,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
                         // 'YES'
 
                         if(!(TextUtils.isEmpty(writeCost.getText()) && TextUtils.isEmpty(writeDate.getText()) && TextUtils.isEmpty(writePlace.getText()))) {
@@ -231,21 +236,15 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                             String Place = writePlace.getText().toString();
                             String Category = writeCategoryList.getSelectedItem().toString();
 
-                            Bundle bundle = new Bundle();
+                            Consume consume_cost = new Consume(radio_state, Place, Cost, Date, Category);
+                            mViewModel.insert(consume_cost);
+                            Toast.makeText(getActivity(),"추가 완료",Toast.LENGTH_SHORT).show();
 
-                            bundle.putString("state", radio_state);
-                            bundle.putString("cost", Cost);
-                            bundle.putString("date", Date);
-                            bundle.putString("place", Place);
-                            bundle.putString("category", Category);
+                            MainFragment mainFragment = new MainFragment();
 
                             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                            List_MainFragment list_mainFragment = new List_MainFragment();
-                            list_mainFragment.setArguments(bundle);
-
-                            fragmentTransaction.replace(R.id.nav_host_fragment, list_mainFragment);
+                            fragmentTransaction.replace(R.id.nav_host_fragment, mainFragment);
                             fragmentTransaction.commit();
 
                         } else {
