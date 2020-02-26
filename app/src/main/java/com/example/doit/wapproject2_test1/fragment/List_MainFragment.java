@@ -1,6 +1,7 @@
 package com.example.doit.wapproject2_test1.fragment;
 
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,7 +33,9 @@ import com.example.doit.wapproject2_test1.list_Adapter;
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
@@ -46,7 +50,9 @@ public class List_MainFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ViewModel mViewModel;
+    ViewModel mViewModel;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
 
@@ -61,6 +67,8 @@ public class List_MainFragment extends Fragment {
     private int incomeMoney = 0;
     private Context mContext;
 
+    String strDate;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
@@ -69,6 +77,8 @@ public class List_MainFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+
 
     }
 
@@ -98,7 +108,12 @@ public class List_MainFragment extends Fragment {
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
-                //do something
+
+                Calendar cal = horizontalCalendar.getDateAt(position);
+
+                strDate = dateFormat.format(cal.getTime());
+                //해당 날짜 값을 setFilter에 넣으면 그 날짜에 관한 정보를 db에서 가져옴
+                mViewModel.setFilter(strDate);
             }
         });
 
@@ -117,17 +132,26 @@ public class List_MainFragment extends Fragment {
 
         mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
 
-        //totalMoney = PreferenceManager.getInt(mContext, "total");
-        //totalM.setText(format.format(totalMoney));
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        String stringNow = dateFormat.format(mDate);
+        mViewModel.setFilter(stringNow);
 
-        // Frag <-> ViewModel
-
-        mViewModel.getAllConsumes().observe(this, new Observer<List<Consume>>() {
+        mViewModel.getOrderByDate().observe(this, new Observer<List<Consume>>() {
             @Override
             public void onChanged(@NonNull List<Consume> consumes) {
                 list_Adapter.setConsumes(consumes);
             }
         });
+
+        //totalMoney = PreferenceManager.getInt(mContext, "total");
+        //totalM.setText(format.format(totalMoney));
+
+        // Frag <-> ViewModel
+
+
+
+
 
         //
 
@@ -165,4 +189,7 @@ public class List_MainFragment extends Fragment {
         void messageFromChildFragment(Uri uri);
     }
 
+    public String getSelectedDate() {
+        return strDate;
+    }
 }

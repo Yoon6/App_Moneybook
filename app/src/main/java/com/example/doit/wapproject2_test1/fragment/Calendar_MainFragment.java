@@ -1,6 +1,7 @@
 package com.example.doit.wapproject2_test1.fragment;
 
 
+import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,10 @@ public class Calendar_MainFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,

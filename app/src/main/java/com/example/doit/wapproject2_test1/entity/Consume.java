@@ -22,9 +22,10 @@ public class Consume {
 
     public String State;
     public String Cost;
-    public String Date;
     public String Place;
     public String Category;
+    @ColumnInfo(name = "date")
+    public String Date;
 
     public Consume(String State, String Place, String Cost, String Date, String Category){
         this.State = State;

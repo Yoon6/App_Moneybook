@@ -10,17 +10,25 @@ import com.example.doit.wapproject2_test1.dao.ConsumeDao;
 import com.example.doit.wapproject2_test1.entity.Consume;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class Repository  {
 
     private ConsumeDao consumeDao;
     private LiveData<List<Consume>> allConsumes;
+    private LiveData<List<Consume>> consumesOrderByDate;
+
+    private final Executor ioExecutor = Executors.newSingleThreadExecutor();
+
 
     Repository(Application application) {
         AppDatabase database = AppDatabase.getInstance(application);
         consumeDao = database.consumeDao();
         allConsumes = consumeDao.getAllConsumes();
     }
+
 
     public void insert(Consume consume){
         new InsertConsumeAsyncTask(consumeDao).execute(consume);
@@ -41,6 +49,11 @@ public class Repository  {
 
     public LiveData<List<Consume>> getAllConsumes() {
         return allConsumes;
+    }
+
+    public LiveData<List<Consume>> getDataOrderByDate(String date) {
+        consumesOrderByDate  = consumeDao.findDataOrderByDate(date);
+        return consumesOrderByDate;
     }
 
     private static class InsertConsumeAsyncTask extends AsyncTask<Consume, Void, Void> {
@@ -102,6 +115,7 @@ public class Repository  {
             return null;
         }
     }
+
 
 
 

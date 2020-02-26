@@ -30,5 +30,7 @@ public interface ConsumeDao {
     @Query("DELETE FROM consume_table")
     void deleteAllConsumes();
 
+    @Query("SELECT * FROM consume_table WHERE Date = :date")
+    LiveData<List<Consume>> findDataOrderByDate(String date);
 
 }
