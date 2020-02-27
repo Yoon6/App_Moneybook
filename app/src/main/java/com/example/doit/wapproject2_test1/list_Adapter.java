@@ -21,6 +21,10 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     private final LayoutInflater mInflater;
     private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
 
+    public Consume getConsumeAtPosition(int position){
+        return consumes.get(position);
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         private final TextView costview;
         private final TextView categoryview;
@@ -51,11 +55,13 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if (consumes != null) {
             Consume current = consumes.get(position);
-            holder.costview.setText(current.getState() + " " + current.getCost() + " 원");
 
             if(current.getState().equals("-")) {
                 holder.costview.setTextColor(Color.parseColor("#e57f8f"));
+            } else if(current.getState().equals("+")) {
+                holder.costview.setTextColor(Color.parseColor("#000000"));
             }
+            holder.costview.setText(current.getState() + " " + current.getCost() + " 원");
             holder.categoryview.setText(current.getCategory());
             holder.placeview.setText(current.getPlace());
             //holder.dateview.setText(current.getDate());
@@ -82,6 +88,7 @@ public class list_Adapter extends RecyclerView.Adapter<list_Adapter.MyViewHolder
             return consumes.size();
         else return 0;
     }
+
 
 }
 

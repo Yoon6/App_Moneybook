@@ -4,6 +4,7 @@ package com.example.doit.wapproject2_test1.fragment;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import com.example.doit.wapproject2_test1.PreferenceManager;
 import com.example.doit.wapproject2_test1.R;
+import com.example.doit.wapproject2_test1.SwipeController;
+import com.example.doit.wapproject2_test1.SwipeControllerActions;
 import com.example.doit.wapproject2_test1.ViewModel;
 import com.example.doit.wapproject2_test1.entity.Consume;
 import com.example.doit.wapproject2_test1.list_Adapter;
@@ -34,6 +38,7 @@ import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +72,11 @@ public class List_MainFragment extends Fragment {
     private int incomeMoney = 0;
     private Context mContext;
 
+    private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
+
     String strDate;
+
+    SwipeController swipeController = null;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
@@ -89,7 +98,8 @@ public class List_MainFragment extends Fragment {
         DecimalFormat format = new DecimalFormat("###,###,###,###");
 
         mContext = getActivity();
-        //totalM=v.findViewById(R.id.totalMoney);
+        text_income=v.findViewById(R.id.textView_income);
+        text_spend=v.findViewById(R.id.textView_spend);
 
         /* starts before 1 month from now */
         Calendar startDate = Calendar.getInstance();
@@ -108,14 +118,20 @@ public class List_MainFragment extends Fragment {
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
             public void onDateSelected(Calendar date, int position) {
-
                 Calendar cal = horizontalCalendar.getDateAt(position);
 
                 strDate = dateFormat.format(cal.getTime());
+                incomeMoney = PreferenceManager.getInt(mContext, strDate+"income");
+                spendMoney = PreferenceManager.getInt(mContext, strDate+"spend");
+                text_income.setText("수입 : + "+format.format(incomeMoney)+" 원");
+                text_spend.setText("지출 : - "+format.format(spendMoney)+" 원");
+
                 //해당 날짜 값을 setFilter에 넣으면 그 날짜에 관한 정보를 db에서 가져옴
                 mViewModel.setFilter(strDate);
             }
         });
+
+
 
 
         //recyclerview
@@ -129,6 +145,8 @@ public class List_MainFragment extends Fragment {
         list_recyclerView.setAdapter(list_Adapter);
 
         list_recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
 
         mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
 
@@ -144,16 +162,51 @@ public class List_MainFragment extends Fragment {
             }
         });
 
-        //totalMoney = PreferenceManager.getInt(mContext, "total");
-        //totalM.setText(format.format(totalMoney));
+        incomeMoney = PreferenceManager.getInt(mContext, stringNow+"income");
+        spendMoney = PreferenceManager.getInt(mContext, stringNow+"spend");
+        text_income.setText("수입 : + "+format.format(incomeMoney)+" 원");
+        text_spend.setText("지출 : - "+format.format(spendMoney)+" 원");
 
-        // Frag <-> ViewModel
+        SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
+            @Override
+            public void onRightClicked(int position) {
+                Consume consume = list_Adapter.getConsumeAtPosition(position);
 
 
 
+                if(consume.getState().equals("-")){
+                    spendMoney = PreferenceManager.getInt(mContext, consume.getDate()+"spend");
+                    spendMoney -= Integer.parseInt(consume.getCost().replace(",",""));
+                    PreferenceManager.setInt(mContext, consume.getDate()+"spend", spendMoney);
+                }else{
+                    incomeMoney = PreferenceManager.getInt(mContext, consume.getDate()+"income");
+                    incomeMoney -= Integer.parseInt(consume.getCost().replace(",",""));
+                    PreferenceManager.setInt(mContext, consume.getDate()+"income", incomeMoney);
+                }
 
+                text_income.setText("수입 : + "+format.format(incomeMoney)+" 원");
+                text_spend.setText("지출 : - "+format.format(spendMoney)+" 원");
 
-        //
+                mViewModel.delete(consume);
+            }
+
+            @Override
+            public void onLeftClicked(int position) {
+                super.onLeftClicked(position);
+                Toast.makeText(getActivity().getApplicationContext(),"Update", Toast.LENGTH_SHORT);
+            }
+        });
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(list_recyclerView);
+
+        list_recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
+
 
 
         return v;

@@ -24,6 +24,7 @@ public class Consume {
     public String Cost;
     public String Place;
     public String Category;
+
     @ColumnInfo(name = "date")
     public String Date;
 

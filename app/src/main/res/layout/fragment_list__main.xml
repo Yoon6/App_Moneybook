@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardCornerRadius="2dp"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
         card_view:layout_constraintTop_toBottomOf="@id/calendarView">
@@ -38,23 +38,23 @@
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/textView_spend"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.5"
-                android:gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:text="수입 : + ###,###"
-                android:textColor="#000000"
-                android:textSize="15sp" />
-            <TextView
                 android:id="@+id/textView_income"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.5"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:text="지출 : - ###,###"
+                android:text="수입 : + 0"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/textView_spend"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="지출 : - 0"
                 android:textColor="#e57f8f"
                 android:textSize="15sp" />
 
@@ -69,7 +69,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        card_view:cardCornerRadius="10dp"
+        card_view:cardCornerRadius="2dp"
         card_view:layout_constraintBottom_toBottomOf="parent"
         card_view:layout_constraintTop_toBottomOf="@id/card_view"
         card_view:layout_constraintVertical_bias="0.13999999"
