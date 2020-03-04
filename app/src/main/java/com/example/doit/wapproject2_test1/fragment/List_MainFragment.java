@@ -11,7 +11,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
+import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -59,6 +62,7 @@ public class List_MainFragment extends Fragment {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+
     public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
 
     //recyclerview
@@ -78,23 +82,29 @@ public class List_MainFragment extends Fragment {
 
     SwipeController swipeController = null;
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+        System.out.println("온액티비티크리에이티드");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
+        System.out.println("온크리이에이트");
 
 
     }
 
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View v=inflater.inflate(R.layout.fragment_list__main,container,false);
 
+        System.out.println("온크리에이트뷰 리스트프래그먼트");
         DecimalFormat format = new DecimalFormat("###,###,###,###");
 
         mContext = getActivity();
@@ -193,7 +203,23 @@ public class List_MainFragment extends Fragment {
             @Override
             public void onLeftClicked(int position) {
                 super.onLeftClicked(position);
-                Toast.makeText(getActivity().getApplicationContext(),"Update", Toast.LENGTH_SHORT);
+
+                Consume consume = list_Adapter.getConsumeAtPosition(position);
+
+                Bundle bundle = new Bundle();
+
+                bundle.putInt("position", position);
+                bundle.putInt("id", consume.getId());
+                bundle.putString("state", consume.getState());
+                bundle.putString("category", consume.getCategory());
+                bundle.putString("place", consume.getPlace());
+                bundle.putString("cost", consume.getCost());
+                bundle.putString("date", consume.getDate());
+
+                EditDialogFragment e = EditDialogFragment.getInstance();
+                e.setArguments(bundle);
+                e.show(getActivity().getSupportFragmentManager(), EditDialogFragment.TAG_EVENT_DIALOG);
+
             }
         });
 
@@ -216,6 +242,7 @@ public class List_MainFragment extends Fragment {
     public void onResume() {
         //getActivity().setTitle(R.string.app_name);
         //getActivity().getActionBar().setTitle(R.string.app_name);
+
         super.onResume();
     }
 
@@ -228,12 +255,14 @@ public class List_MainFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
     }
 
 
@@ -245,4 +274,6 @@ public class List_MainFragment extends Fragment {
     public String getSelectedDate() {
         return strDate;
     }
+
+
 }

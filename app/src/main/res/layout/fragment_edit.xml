@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_margin="10dp"
+                android:id="@+id/card_view_write2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cardCornerRadius="8dp"
+                >
+    <RadioGroup
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:checked="true"
+            android:id="@+id/writeRadioButton1"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:text="지출" />
+
+        <RadioButton
+            android:id="@+id/writeRadioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:text="수입" />
+    </RadioGroup>
+            </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_margin="10dp"
+            android:id="@+id/card_view_write3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp"
+            >
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:text="카테고리"
+        android:paddingLeft="5dp"
+        android:layout_marginBottom="10dp"
+        />
+                <Spinner
+                android:id="@+id/writeCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                />
+        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_margin="10dp"
+            android:id="@+id/card_view_write4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp"
+            >
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView3"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="항목"
+        android:paddingLeft="5dp"
+        />
+
+    <EditText
+        android:id="@+id/writePlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:maxLength="15"
+        android:imeOptions="actionDone"
+        android:maxEms="5"
+        android:hint="항목" />
+        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_margin="10dp"
+            android:id="@+id/card_view_write5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp"
+            >
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <TextView
+        android:paddingLeft="5dp"
+        android:id="@+id/textView4"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="가격"
+        />
+
+    <EditText
+        android:id="@+id/writeCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:hint="가격"/>
+        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_margin="10dp"
+            android:id="@+id/card_view_write6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardCornerRadius="8dp"
+            >
+        <LinearLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <TextView
+            android:paddingLeft="5dp"
+            android:id="@+id/textView5"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="날짜"
+            />
+
+    <TextView
+        android:id="@+id/writeDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:paddingLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp"
+        android:inputType="date"
+        android:textColor="#000000"
+        android:text="YYYY-MM-DD"/>
+        </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>
