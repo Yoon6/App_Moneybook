@@ -2,18 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/ic_main"
-        android:icon="@drawable/ic_main_on_black_24dp"
-        android:title="@string/title_home" />
+        android:id="@+id/ic_calendar"
+        android:icon="@drawable/ic_baseline_date_range_24"
+        android:title="@string/title_calendar" />
+
+    <item
+        android:id="@+id/ic_list"
+        android:icon="@drawable/ic_baseline_view_list_24"
+        android:title="@string/title_list" />
 
     <item
         android:id="@+id/ic_write"
-        android:icon="@drawable/ic_write_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/ic_baseline_post_add_24"
+        android:title="@string/title_write" />
 
     <item
-        android:id="@+id/ic_settings_applications"
+        android:id="@+id/ic_setting"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_setting" />
 
 </menu>

@@ -1,32 +1,23 @@
 package com.example.doit.wapproject2_test1;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
-import com.example.doit.wapproject2_test1.entity.Consume;
+import com.example.doit.wapproject2_test1.fragment.Calendar_MainFragment;
 import com.example.doit.wapproject2_test1.fragment.List_MainFragment;
-import com.example.doit.wapproject2_test1.fragment.MainFragment;
 import com.example.doit.wapproject2_test1.fragment.SettingFragment;
 import com.example.doit.wapproject2_test1.fragment.WriteFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.tabs.TabLayout;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
-        implements MainFragment.OnFragmentInteractionListener, List_MainFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     private ViewModel mViewModel;
     public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
@@ -39,9 +30,10 @@ public class MainActivity extends AppCompatActivity
 
     //bottomNavi
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private MainFragment mainFragment = new MainFragment();
     private WriteFragment writeFragment = new WriteFragment();
     private SettingFragment settingFragment = new SettingFragment();
+    private List_MainFragment listMainFragment = new List_MainFragment();
+    private Calendar_MainFragment calendarMainFragment = new Calendar_MainFragment();
 
 
     @Override
@@ -51,8 +43,8 @@ public class MainActivity extends AppCompatActivity
 
         //bottomNavi
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.nav_host_fragment, new MainFragment());
-        transaction.commit();
+        transaction.replace(R.id.nav_host_fragment, listMainFragment).commitAllowingStateLoss();
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
@@ -68,29 +60,22 @@ public class MainActivity extends AppCompatActivity
 
                     switch(menuItem.getItemId())
                     {
-                        case R.id.ic_main:
-                            transaction.replace(R.id.nav_host_fragment, mainFragment).commitAllowingStateLoss();
+                        case R.id.ic_calendar:
+                            transaction.replace(R.id.nav_host_fragment, calendarMainFragment).commitAllowingStateLoss();
+                            break;
+                        case R.id.ic_list:
+                            transaction.replace(R.id.nav_host_fragment, listMainFragment).commitAllowingStateLoss();
                             break;
                         case R.id.ic_write:
                             transaction.replace(R.id.nav_host_fragment, writeFragment).commitAllowingStateLoss();
                             break;
-                        case R.id.ic_settings_applications:
+                        case R.id.ic_setting:
                             transaction.replace(R.id.nav_host_fragment, settingFragment).commitAllowingStateLoss();
                             break;
                     }
             return true;
         }
 
-    }
-
-    @Override
-    public void messageFromParentFragment(Uri uri) {
-        Log.i("TAG", "received communication from parent fragment");
-    }
-
-    @Override
-    public void messageFromChildFragment(Uri uri) {
-        Log.i("TAG", "received communication from child fragment");
     }
 
     @Override

@@ -54,16 +54,214 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+public class List_MainFragment extends Fragment {
+
+    ViewModel mViewModel;
+    public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    //recyclerview
+    private RecyclerView list_recyclerView;
+    private com.example.doit.wapproject2_test1.list_Adapter list_Adapter;
+    private RecyclerView.LayoutManager list_layoutManager;
+
+    private TextView text_income;
+    private TextView text_spend;
+    private int spendMoney = 0;
+    private int incomeMoney = 0;
+    private Context mContext;
+
+    private List<Consume> consumes = new ArrayList<>(); // Cached copy of words
+
+    String strDate;
+
+    SwipeController swipeController = null;
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+    }
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View v=inflater.inflate(R.layout.fragment_list__main,container,false);
+
+        System.out.println("온크리에이트뷰 리스트프래그먼트");
+        DecimalFormat format = new DecimalFormat("###,###,###,###");
+
+        mContext = getActivity();
+        text_income=v.findViewById(R.id.textView_income);
+        text_spend=v.findViewById(R.id.textView_spend);
+
+        // starts before 1 month from now
+        Calendar startDate = Calendar.getInstance();
+        startDate.add(Calendar.MONTH, -1);
+
+        //ends after 1 month from now
+        Calendar endDate = Calendar.getInstance();
+        endDate.add(Calendar.MONTH, 1);
+
+
+        HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(v, R.id.calendarView)
+                .range(startDate, endDate)
+                .datesNumberOnScreen(7)
+                .build();
+
+        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+            @Override
+            public void onDateSelected(Calendar date, int position) {
+                Calendar cal = horizontalCalendar.getDateAt(position);
+
+                strDate = dateFormat.format(cal.getTime());
+                incomeMoney = PreferenceManager.getInt(mContext, strDate+"income");
+                spendMoney = PreferenceManager.getInt(mContext, strDate+"spend");
+                text_income.setText("수입 : + "+format.format(incomeMoney)+" 원");
+                text_spend.setText("지출 : - "+format.format(spendMoney)+" 원");
+
+                //해당 날짜 값을 setFilter에 넣으면 그 날짜에 관한 정보를 db에서 가져옴
+                mViewModel.setFilter(strDate);
+            }
+        });
+
+
+
+
+        //recyclerview
+        list_recyclerView= v.findViewById(R.id.my_recycler_view);
+        list_recyclerView.setHasFixedSize(true);
+        list_layoutManager=new LinearLayoutManager(getActivity());
+        list_recyclerView.setLayoutManager(list_layoutManager);
+        list_recyclerView.scrollToPosition(0);
+
+        list_Adapter = new list_Adapter(getActivity());
+        list_recyclerView.setAdapter(list_Adapter);
+
+        list_recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
+
+        mViewModel = ViewModelProviders.of(getActivity()).get(ViewModel.class);
+
+        long now = System.currentTimeMillis();
+        Date mDate = new Date(now);
+        String stringNow = dateFormat.format(mDate);
+        mViewModel.setFilter(stringNow);
+
+        mViewModel.getOrderByDate().observe(this, new Observer<List<Consume>>() {
+            @Override
+            public void onChanged(@NonNull List<Consume> consumes) {
+                list_Adapter.setConsumes(consumes);
+            }
+        });
+
+        incomeMoney = PreferenceManager.getInt(mContext, stringNow+"income");
+        spendMoney = PreferenceManager.getInt(mContext, stringNow+"spend");
+        text_income.setText("수입 : + "+format.format(incomeMoney)+" 원");
+        text_spend.setText("지출 : - "+format.format(spendMoney)+" 원");
+
+        SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
+            @Override
+            public void onRightClicked(int position) {
+                Consume consume = list_Adapter.getConsumeAtPosition(position);
+
+
+
+                if(consume.getState().equals("-")){
+                    spendMoney = PreferenceManager.getInt(mContext, consume.getDate()+"spend");
+                    spendMoney -= Integer.parseInt(consume.getCost().replace(",",""));
+                    PreferenceManager.setInt(mContext, consume.getDate()+"spend", spendMoney);
+                }else{
+                    incomeMoney = PreferenceManager.getInt(mContext, consume.getDate()+"income");
+                    incomeMoney -= Integer.parseInt(consume.getCost().replace(",",""));
+                    PreferenceManager.setInt(mContext, consume.getDate()+"income", incomeMoney);
+                }
+
+                text_income.setText("수입 : + "+format.format(incomeMoney)+" 원");
+                text_spend.setText("지출 : - "+format.format(spendMoney)+" 원");
+
+                mViewModel.delete(consume);
+            }
+
+            @Override
+            public void onLeftClicked(int position) {
+                super.onLeftClicked(position);
+
+                Consume consume = list_Adapter.getConsumeAtPosition(position);
+
+                Bundle bundle = new Bundle();
+
+                bundle.putInt("position", position);
+                bundle.putInt("id", consume.getId());
+                bundle.putString("state", consume.getState());
+                bundle.putString("category", consume.getCategory());
+                bundle.putString("place", consume.getPlace());
+                bundle.putString("cost", consume.getCost());
+                bundle.putString("date", consume.getDate());
+
+                EditDialogFragment e = EditDialogFragment.getInstance();
+                e.setArguments(bundle);
+                e.show(getActivity().getSupportFragmentManager(), EditDialogFragment.TAG_EVENT_DIALOG);
+
+            }
+        });
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(list_recyclerView);
+
+        list_recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
+
+
+
+        return v;
+    }
+
+    @Override
+    public void onResume() {
+        //getActivity().setTitle(R.string.app_name);
+        //getActivity().getActionBar().setTitle(R.string.app_name);
+        super.onResume();
+    }
+
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("메인프래그먼트-OnActivityResult");
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NEW_CONSUME_FRAGMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+            System.out.println("뷰모델에 인서트");
+            //Consume consume = new Consume(data.getStringExtra(WriteFragment.EXTRA_REPLY));
+            //mViewModel.insert(consume);
+        } else {
+
+        }
+    }
+
+}
+/*
 public class List_MainFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
     ViewModel mViewModel;
+    public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-
-    public static final int NEW_CONSUME_FRAGMENT_REQUEST_CODE = 1;
 
     //recyclerview
     private RecyclerView list_recyclerView;
@@ -111,11 +309,11 @@ public class List_MainFragment extends Fragment {
         text_income=v.findViewById(R.id.textView_income);
         text_spend=v.findViewById(R.id.textView_spend);
 
-        /* starts before 1 month from now */
+        // starts before 1 month from now
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);
 
-        /* ends after 1 month from now */
+        //ends after 1 month from now
         Calendar endDate = Calendar.getInstance();
         endDate.add(Calendar.MONTH, 1);
 
@@ -277,3 +475,4 @@ public class List_MainFragment extends Fragment {
 
 
 }
+*/

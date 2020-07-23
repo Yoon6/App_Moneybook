@@ -21,12 +21,6 @@ import com.example.doit.wapproject2_test1.R;
  */
 public class Calendar_MainFragment extends Fragment {
 
-    private List_MainFragment.OnFragmentInteractionListener mListener;
-
-    public Calendar_MainFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,27 +34,5 @@ public class Calendar_MainFragment extends Fragment {
         return  v;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof List_MainFragment.OnFragmentInteractionListener) {
-            mListener = (List_MainFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void messageFromChildFragment(Uri uri);
-    }
 
 }

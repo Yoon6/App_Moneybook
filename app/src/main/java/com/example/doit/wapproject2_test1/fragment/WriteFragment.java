@@ -259,8 +259,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                             mViewModel.insert(consume_cost);
                             Toast.makeText(getActivity(),"추가 완료",Toast.LENGTH_SHORT).show();
 
-                            MainFragment mainFragment = new MainFragment();
-
+                            //MainFragment mainFragment = new MainFragment();
                             //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                             //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             //fragmentTransaction.replace(R.id.nav_host_fragment, mainFragment);
